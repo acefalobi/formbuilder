@@ -39,11 +39,12 @@
                 <li><a href="/blog">Blog</a> </li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated is not defined %}
-                <li><a href="/users/login">Login</a> </li>
-                <li><a class="btn btn-outline border-primary" href="/users/signup" style="padding: 10px 20px; margin-top: 4px">Sign Up</a> </li>
-                {% else %}
+                {% if user.is_authenticated %}
                 <li><a class="btn btn-outline border-primary" href="/dashboard" style="padding: 10px 20px; margin-top: 4px">Go To Dashboard</a></li>
+                <li><a href="/logout">Log Out</a> </li>
+                {% else %}
+                <li><a href="/login">Login</a> </li>
+                <li><a class="btn btn-outline border-primary" href="/register" style="padding: 10px 20px; margin-top: 4px">Register</a> </li>
                 {% endif %}
               </ul>
             </div>
@@ -54,18 +55,11 @@
           <div id="#contact-section" class="container text-white">
             <div class="row">
               <div class="col-md-4">
-                <h3>Business</h3><br />
+                <h3>About</h3><br />
                 <ul class="links-list list-group">
                   <li><a href="/about">About FormBuilder</a></li>
                   <li><a href="/features">Features</a></li>
                   <li><a href="/pricing">Blog</a></li>
-                </ul>
-              </div>
-              <div class="col-md-4">
-                <h3>Career</h3><br />
-                <ul class="links-list list-group">
-                  <li><a href="#">Open Positions</a></li>
-                  <li><a href="#">Job Opportunities</a></li>
                 </ul>
               </div>
               <div class="col-md-4">

@@ -9,13 +9,20 @@ from .models import *
 
 from datetime import datetime, timedelta
 
+
 # Create your views here.
 def landing_page(request):
-    return HttpResponseRedirect('/login')
+    return HttpResponseRedirect('/dashboard')
     # return HttpResponse("Hello World. You're at the FormBuilder index")
+
+
+def dashboard(request):
+    return render(request, "dashboard.html")
+
 
 def login_redirection_page(request):
     return HttpResponseRedirect('/login')
+
 
 def register_page(request):
     if request.method == 'POST':
@@ -26,14 +33,18 @@ def register_page(request):
                 password=form.cleaned_data['password1'],
                 email=form.cleaned_data['email']
             )
-            return HttpResponseRedirect('/register/success')
+            if user:
+                return HttpResponseRedirect('/dashboard')
+            else:
+                return HttpResponseRedirect('/register')
     else:
         form = RegistrationForm()
 
     variables = {
-        'form' : form
+        'form': form
     }
     return render(request, "registration/register.html", variables)
+
 
 def logout_page(request):
     logout(request)
