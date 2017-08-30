@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="theme-color" content="#C72D45">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>FormBuilder | {% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %} | FormBuilder</title>
 
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans" />
 
@@ -20,73 +20,76 @@
 
     <!-- Custom CSS -->
     <link href="/assets/css/style.css" rel="stylesheet" type="text/css" media="all"/>
-  </head>
-  <body>
-    <div class="body">
-      <nav class="navbar navbar-fixed-top">
+</head>
+<body>
+<div class="body">
+    <nav class="navbar navbar-fixed-top">
         <div class="container">
-          <div class="navbar-header">
-            <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-nav">
-              <i class="icon-Align-Right text-white icon"></i>
-            </button>
-            <a class="navbar-brand" href="/"><img />
-              &nbsp;&nbsp;&nbsp;<span>FormBuilder</span></a>
+            <div class="navbar-header">
+                <button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-nav">
+                    <i class="icon-Align-Right text-white icon"></i>
+                </button>
+                <a class="navbar-brand" href="/"><img />
+                    &nbsp;&nbsp;&nbsp;<span>FormBuilder</span></a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-nav">
-              <ul class="nav navbar-nav navbar-left">
-                <li><a href="/features">Features</a> </li>
-                <li><a href="/why-us">Why Us?</a> </li>
-                <li><a href="/blog">Blog</a> </li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                <li><a class="btn btn-outline border-primary" href="/dashboard" style="padding: 10px 20px; margin-top: 4px">Go To Dashboard</a></li>
-                <li><a href="/logout">Log Out</a> </li>
-                {% else %}
-                <li><a href="/login">Login</a> </li>
-                <li><a class="btn btn-outline border-primary" href="/register" style="padding: 10px 20px; margin-top: 4px">Register</a> </li>
-                {% endif %}
-              </ul>
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="/features">Features</a> </li>
+                    <li><a href="/why-us">Why Us?</a> </li>
+                    <li><a href="/blog">Blog</a> </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if user.is_authenticated %}
+                        {% if dashboard is defined %}
+                            <li><a class="btn btn-outline border-primary" href="/dashboard" style="padding: 10px 20px; margin-top: 4px">Go To Dashboard</a></li>
+                        {% else %}
+                            <li><a href="/logout">Log Out</a> </li>
+                        {% endif %}
+                    {% else %}
+                        <li><a href="/login">Login</a> </li>
+                        <li><a class="btn btn-outline border-primary" href="/register" style="padding: 10px 20px; margin-top: 4px">Register</a> </li>
+                    {% endif %}
+                </ul>
             </div>
-          </div>
-        </nav>
-        {% block content %}{% endblock %}
-        <footer>
-          <div id="#contact-section" class="container text-white">
+        </div>
+    </nav>
+    {% block content %}{% endblock %}
+    <footer>
+        <div id="#contact-section" class="container text-white">
             <div class="row">
-              <div class="col-md-4">
-                <h3>About</h3><br />
-                <ul class="links-list list-group">
-                  <li><a href="/about">About FormBuilder</a></li>
-                  <li><a href="/features">Features</a></li>
-                  <li><a href="/pricing">Blog</a></li>
-                </ul>
-              </div>
-              <div class="col-md-4">
-                <h3>Contact</h3><br />
-                <ul class="links-list list-group">
-                  <li><a href="mailto:support@formbuilder.com">support@formbuilder.com</a></li>
-                  <li><a href="tel:+2348012345678">(+234) 801-234-5678</a></li>
-                  <li><a href="/faq">FAQs</a></li>
-                </ul>
-              </div>
+                <div class="col-md-4">
+                    <h3>About</h3><br />
+                    <ul class="links-list list-group">
+                        <li><a href="/about">About FormBuilder</a></li>
+                        <li><a href="/features">Features</a></li>
+                        <li><a href="/pricing">Blog</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h3>Contact</h3><br />
+                    <ul class="links-list list-group">
+                        <li><a href="mailto:support@formbuilder.com">support@formbuilder.com</a></li>
+                        <li><a href="tel:+2348012345678">(+234) 801-234-5678</a></li>
+                        <li><a href="/faq">FAQs</a></li>
+                    </ul>
+                </div>
             </div>
-          </div>
-        </footer>
-      </div>
-  </body>
+        </div>
+    </footer>
+</div>
+</body>
 
-  <!-- JQuery -->
-  <script src="/assets/lib/jquery/jquery-3.1.0.min.js"></script>
-  <script src="/assets/lib/jquery/jquery.easing.1.3.js"></script>
+<!-- JQuery -->
+<script src="/assets/lib/jquery/jquery-3.1.0.min.js"></script>
+<script src="/assets/lib/jquery/jquery.easing.1.3.js"></script>
 
-  <!-- Bootstrap JS -->
-  <script src="/assets/lib/bootstrap/js/bootstrap.min.js" ></script>
-  <!-- <script src="/assets/lib/bootstrap/js/bootstrap_select.min.js" ></script> -->
+<!-- Bootstrap JS -->
+<script src="/assets/lib/bootstrap/js/bootstrap.min.js" ></script>
+<!-- <script src="/assets/lib/bootstrap/js/bootstrap_select.min.js" ></script> -->
 
-  <!-- Extra JS -->
-  {% block js %}{% endblock %}
+<!-- Extra JS -->
+{% block js %}{% endblock %}
 
-  <!-- Custom JS -->
-  <script src="/assets/js/app.js"></script>
+<!-- Custom JS -->
+<script src="/assets/js/app.js"></script>
 </html>

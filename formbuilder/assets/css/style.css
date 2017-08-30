@@ -1,5 +1,6 @@
 @font-face {
     font-family: "Open Sans";
+    /*noinspection CssUnknownTarget*/
     src: url(/assets/fonts/OpenSans-Light.ttf);
 }
 
@@ -26,11 +27,18 @@ hr {
 
 .btn {
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+    margin-bottom: 10px;
     -webkit-transition: all .25s ease-in-out;
     -moz-transition: all .25s ease-in-out;
     -ms-transition: all .25s ease-in-out;
     -o-transition: all .25s ease-in-out;
     transition: all .25s ease-in-out;
+}
+
+.btn i {
+    font-size: 18px;
+    position: relative;
+    top: 1px;
 }
 
 .btn.btn-outline {
@@ -64,6 +72,7 @@ a {
 
 a:hover, a:focus, a:active {
     color: inherit;
+    text-decoration: none;
 }
 
 ul.errorlist {
@@ -412,18 +421,24 @@ textarea.form-control {
 
 /* Header */
 .header {
+    /*noinspection CssUnknownTarget*/
     background: url(/assets/img/header_bg.jpg) no-repeat fixed center;
     background-size: cover;
     height: 500px;
 }
 
-.header .header-content {
-    /*top: 50%;*/
-    /*-webkit-transform: translateY(-50%);*/
-    /*-moz-transform: translateY(-50%);*/
-    /*-ms-transform: translateY(-50%);*/
-    /*-o-transform: translateY(-50%);*/
-    /*transform: translateY(-50%);*/
+.header-full {
+    height: 100%;
+}
+
+.header-full .header-content {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
 }
 
 .header .header-box {
@@ -437,6 +452,7 @@ textarea.form-control {
 }
 
 .header-register {
+    /*noinspection CssUnknownTarget*/
     background: url(/assets/img/header_bg.jpg) no-repeat fixed center;
     background-size: cover;;
     height: auto;
@@ -448,41 +464,6 @@ textarea.form-control {
 }
 
 /* End Header */
-
-
-/* Typehead */
-
-.tt-menu {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    color: #444;
-    margin-top: 25px;
-    overflow: hidden;;
-    width: 100%;
-}
-
-.tt-menu .tt-suggestion {
-    border-bottom: 1px solid #ccc;
-    cursor: pointer;
-    padding: 5px;
-    -webkit-transition: all .15s ease-in-out;
-    -moz-transition: all .15s ease-in-out;
-    -ms-transition: all .15s ease-in-out;
-    -o-transition: all .15s ease-in-out;
-    transition: all .15s ease-in-out
-}
-
-.tt-menu .tt-suggestion:hover, .tt-menu .tt-suggestion:active, .tt-menu .tt-suggestion:focus {
-    background-color: #444;
-    color: #fff;
-}
-
-.tt-menu .tt-suggestion:last-child {
-    border-bottom: none;
-}
-
-/* End Typehead */
 
 
 /* Scroll Down */
@@ -515,6 +496,107 @@ textarea.form-control {
     color: #444;
 }
 
+.main-container {
+    padding-top: 70px;
+    padding-bottom: 70px;
+}
+
+.form-preview {
+    border-radius: 4px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.form-preview .form-title {
+    background-color: #444;
+    color: #FFFFFF;
+    font-size: 12pt;
+    padding: 15px 20px;
+}
+
+.form-preview .form-actions {
+    padding: 10px 20px;
+}
+
+.form-preview .form-actions i {
+    font-size: 12pt;
+    padding-right: 5px;
+}
+
+.form-preview .form-title > i {
+    font-size: 24pt;
+    margin-top: -5px;
+    position: absolute;
+}
+
+.form-view {
+    padding-top: 46px;
+    width: 100%;
+}
+
+.form-view .form-head {
+    background: #AD1457;
+    color: #FFFFFF;
+    padding: 15px 0;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    z-index: 1;
+}
+
+.form-view .form-head input {
+    background: none;
+    border-bottom: 1px solid #FFFFFF;
+    border-radius: 2px;
+    color: #FFFFFF;
+    font-size: 36px;
+    margin-top: 15px;
+    margin-bottom: 0;
+    padding-left: 10px;
+    text-align: center;
+    width: 100%;
+}
+
+.form-view .form-head input::placeholder {
+    color: #dddddd;
+}
+
+.form-view .form-content {
+    font-size: large;
+}
+
+.form-view .form-content > button {
+    margin-top: 30px;
+}
+
+.form-view .form-content ol li {
+    margin-bottom: 20px;
+}
+
+input.secondary-input, textarea.secondary-input, select.secondary-input {
+    border-bottom: 1px solid #AD1457;
+    border-radius: 2px;
+    padding-left: 10px;
+    width: 100%;
+}
+
+.form-view .form-content input[type="text"], .form-view .form-content input[type="email"], .form-view .form-content input[type="password"],
+.form-view .form-content textarea, .form-view .form-content select, .form-view .form-content input[type="tel"],
+.form-view .form-content input[type="url"], .form-view .form-content input[type="search"] {
+    border-bottom: 1px solid #AD1457;
+    border-radius: 2px;
+    padding-left: 10px;
+    width: 100%;
+}
+
+.form-view .form-content textarea {
+    border: 1px solid #AD1457;
+    margin-top: 10px;
+    padding-top: 6px;
+    resize: vertical;
+}
+
 /* End Main Container */
 
 section {
@@ -534,17 +616,6 @@ section#feature-section .feature-icon {
     font-size: 60pt;
 }
 
-section#interlude-section {
-    background-image: url(/img/Happy-Person-Transparent.png);
-    background-position: 150px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    font-size: 12pt;
-    font-weight: 900;
-    letter-spacing: 1px;
-    padding: 100px 10px;
-}
-
 
 /* Dashboard Section */
 
@@ -562,21 +633,30 @@ section#interlude-section {
     font-size: 24pt;
 }
 
-table.table-admin {
+table.table {
     background-color: #FFFFFF;
-    border: 1px solid #C72D45;
+    border: 1px solid #AD1457;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     color: #444444;
-    font-size: 8pt;
+    font-size: 9pt;
     margin-bottom: 20px;
     margin-top: 10px;
 }
 
-table.table-admin thead {
-    background-color: #C72D45;
+table.table thead {
+    background-color: #AD1457;
     color: #FFFFFF;
+}
+
+table.table > thead > tr > th {
+    border-bottom: 1px solid #AD1457;
+}
+
+table.table > tbody > tr > th {
+    border-left: 1px solid #AD1457;
+    border-top: 1px solid #ccc;
 }
 
 /* End Dashboard Section */

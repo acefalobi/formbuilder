@@ -4,11 +4,14 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import re
 
+
 class FormForm(forms.Form):
-    # url = forms.URLField(label='URL', widget=forms.TextInput(attrs={'size': 64}))
     title = forms.CharField(label='Title', widget=forms.TextInput(attrs={'size': 50}))
-    # tags = forms.CharField(label='Tags', required=False, widget=forms.TextInput(attrs={'size': 64}))
-    # share = forms.BooleanField(label='Share on the main  page', required=False)
+    jsonForm = forms.CharField(label='Json Form', widget=forms.HiddenInput(attrs={'size': 100000}))
+
+
+class FormSubmissionForm(forms.Form):
+    jsonFormSubmission = forms.CharField(label='Json Form Submission', widget=forms.HiddenInput(attrs={'size': 100000}))
 
 
 class RegistrationForm(forms.Form):

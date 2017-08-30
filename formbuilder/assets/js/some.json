@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1, "fieldType": "text", "label": "First Field"
+  },
+  {
+    "id": 2, "fieldType": "textarea", "label": "Second Field"
+  },
+  {
+    "id": 3, "fieldType": "select", "label": "Third Field",
+    "options": ["Option 1", "Option 2", "Option 3", "Option 4"]
+  }
+]

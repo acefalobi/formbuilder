@@ -1,0 +1,7 @@
+[
+  {"id":0,"fieldType":"text","label":"What's your full name"},
+  {"id":1,"fieldType":"text","label":"How old are you"},
+  {"id":2,"fieldType":"select","label":"Your Gender","options":["Male","Female"]},
+  {"id":3,"fieldType":"text","label":"Where do you stay"},
+  {"id":4,"fieldType":"textarea","label":"Give a brief description about yourself"}
+]

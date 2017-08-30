@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}Editing: {{ form.title.value }}{% endblock %}
+{% block content %}
+    <!--suppress JSUnusedAssignment, JSUnresolvedVariable, XmlDefaultAttributeValue -->
+    <div class="form-view form-edit main-container">
+        <form id="main-form" action="." method="post">
+            {% csrf_token %}
+            <div class="form-head">
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <input type="text" name="title" value="{{ form.title.value }}" placeholder="Enter a title..."
+                               size="{{ form.title.max_length }}" required="" id="id_title" title="Title">
+                        <input type="hidden" name="jsonForm" value="{{ form.jsonForm.value }}" required id="id_jsonForm">
+                    </div>
+                </div>
+            </div>
+            <div class="container main-container" style="padding-top: 140px">
+                <div class="row">
+                    <div class="col-md-4">
+                        {{ form.non_field_errors }}
+                        {{ form.title.errors }}
+                        {{ form.jsonForm.errors }}
+                        <div id="panel-edit-field" class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="panel-title">Edit Field</div>
+                            </div>
+                            <div class="panel-body">
+                                <label for="select-field">Select Field</label>
+                                <select id="select-field" onchange="selectField(document.getElementById('select-field').value)" title="Select Field" class="secondary-input"></select>
+                                <label for="edit-field-title">Field Title</label>
+                                <input id="edit-field-title" type="text" placeholder="E.g 'Where do you stay?'" class="secondary-input">
+                                <label for="edit-field-type">Field Type</label>
+                                <select id="edit-field-type" onchange="changeFieldType(document.getElementById('edit-field-type').value)" title="Select Field Type" class="secondary-input">
+                                    <option value="text">Text Field</option>
+                                    <option value="textarea">Text Area</option>
+                                    <option value="select">Option Select</option>
+                                </select>
+                                <div id="edit-options" style="margin-top: 20px">
+                                    <label for="edit-field-options">Choices (Separate with commas)</label>
+                                    <input id="edit-field-options" type="text" placeholder="E.g 'Lagos,Port Harcourt,Abuja'" class="secondary-input" />
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <button type="button" class="btn bg-primary width-full" onclick="updateField()">Update Field</button>
+                                <button type="button" class="btn btn-danger width-full" onclick="deleteField()">Delete Field</button>
+                            </div>
+                        </div>
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <div class="panel-title">Add Field</div>
+                            </div>
+                            <div class="panel-body">
+                                <button onclick="fieldType='text';document.getElementById('set-options').style.display = 'none'" type="button" class="btn bg-primary" data-toggle="modal" data-target="#field-modal">
+                                    <i class="icon-Normal-Text"></i> &nbsp; Text Field</button>
+                                <button onclick="fieldType='textarea';document.getElementById('set-options').style.display = 'none'" type="button" class="btn bg-primary" data-toggle="modal" data-target="#field-modal">
+                                    <i class="icon-Text-Box"></i> &nbsp; Text Area</button>
+                                <button onclick="fieldType='select';document.getElementById('set-options').style.display = 'block'" type="button" class="btn bg-primary" data-toggle="modal" data-target="#field-modal">
+                                    <i class="icon-Arrow-Down3"></i> &nbsp; Option Select</button>
+                            </div>
+                        </div>
+                        <button class="btn btn-success btn-lg width-full">Save Changes</button>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-content">
+                            <ol id="form-content" ></ol>
+
+                            <div id="field-modal" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header bg-primary">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Add New Field</h4>
+                                        </div>
+                                        <div class="modal-body" style="padding-left: 30px; padding-right: 30px;">
+                                            <label for="field-title">Field Title</label>
+                                            <input id="field-title" type="text" placeholder="'E.g Where do you stay?'">
+                                            <div id="set-options" style="margin-top: 20px">
+                                                <label for="field-options">Choices (Separate with commas)</label>
+                                                <input id="field-options" type="text" placeholder="E.g 'Lagos,Port Harcourt,Abuja'" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" data-dismiss="modal"
+                                                    onclick="addField(document.getElementById('field-title').value, document.getElementById('field-options').value)" class="btn bg-primary">
+                                                Add Field
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            var formArray = {{ form.jsonForm.value | safe }};
+                            var fieldType = 'text';
+                            var selectedField = 0;
+
+                            function changeFieldType(type) {
+                                if (type === "select") {
+                                    document.getElementById('edit-options').style.display = 'block';
+                                } else {
+                                    document.getElementById('edit-options').style.display = 'none';
+                                }
+                            }
+
+                            function selectField(id) {
+                                selectedField = id;
+                                changeFieldType(formArray[selectedField].fieldType);
+                                document.getElementById("select-field").value = selectedField;
+                                document.getElementById("edit-field-title").value = formArray[selectedField].label;
+                                document.getElementById('edit-field-type').value = formArray[selectedField].fieldType;
+
+                                if (formArray[selectedField].options)
+                                    document.getElementById('edit-field-options').value = formArray[selectedField].options.join(',');
+                            }
+
+                            function loadForm() {
+
+                                var formHtml = '';
+                                var fieldsSelectHtml = '';
+                                for (var i = 0; i < formArray.length; i++) {
+                                    fieldsSelectHtml += '<option value="' + i + '">' + '(' + (i + 1) + ') ' + formArray[i].label + '</option>';
+                                    formHtml += '<li>';
+                                    formHtml += '<label for="' + i + '">' + formArray[i].label + ':</label>';
+                                    switch (formArray[i].fieldType) {
+                                        case "text":
+                                            formHtml += '<input type="text" name="' + i + '" placeholder="Enter your answer..."' +
+                                                ' id="' + i + '">';
+                                            break;
+                                        case "textarea":
+                                            formHtml += '<textarea name="' + i + '" placeholder="Enter your answer..." ' +
+                                                'id="' + i + '"></textarea>';
+                                            break;
+                                        case "select":
+                                            formHtml += '<select id="' + i + '" name="' + i + '">';
+                                            for (var j = 0; j < formArray[i].options.length; j++) {
+                                                formHtml += '<option value="' + formArray[i].options[j] + '">' + formArray[i].options[j] + '' +
+                                                    '</option>';
+                                            }
+                                            formHtml += '</select>';
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    formHtml += '<button onclick="selectField(' + i + ')" type="button" class="btn bg-primary"><i class="icon-Pen-4"></i>&nbsp;&nbsp;Edit Field</button>';
+                                    formHtml += '</li>'
+                                }
+                                document.getElementById("form-content").innerHTML = formHtml;
+                                document.getElementById("select-field").innerHTML = fieldsSelectHtml;
+
+                                if (formArray.length <= 0)
+                                    document.getElementById('panel-edit-field').style.display = 'none';
+                                else {
+                                    document.getElementById('panel-edit-field').style.display = 'block';
+                                    selectField(selectedField);
+                                }
+
+                                document.getElementById('id_jsonForm').value = JSON.stringify(formArray);
+                            }
+
+                            loadForm();
+
+                            function addField(title, options) {
+                                if (title === "") {
+                                    console.warn("Warning: Title cannot be empty");
+                                    return;
+                                }
+                                if (fieldType === "select" && options === "") {
+                                    console.warn("Warning: Options cannot be empty");
+                                    return;
+                                }
+                                var newField;
+                                if (fieldType === "select") {
+                                    newField = {
+                                        "id": formArray.length,
+                                        "fieldType": fieldType,
+                                        "label": title,
+                                        "options": options.split(",")
+                                    };
+                                } else {
+                                    newField = {
+                                        "id": formArray.length,
+                                        "fieldType": fieldType,
+                                        "label": title
+                                    };
+                                }
+
+                                formArray.push(newField);
+                                loadForm();
+                            }
+
+                            function deleteField() {
+                                var id = document.getElementById("select-field").value;
+                                formArray.splice(id, 1);
+                                selectedField = 0;
+                                loadForm();
+                            }
+
+                            function updateField() {
+                                var id = document.getElementById("select-field").value;
+                                formArray[id].label = document.getElementById("edit-field-title").value;
+                                formArray[id].fieldType = document.getElementById('edit-field-type').value;
+
+                                if (formArray[id].fieldType === "select")
+                                    formArray[selectedField].options = document.getElementById('edit-field-options').value.split(",");
+
+                                loadForm();
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            $(window).keydown(function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
+{% endblock %}
