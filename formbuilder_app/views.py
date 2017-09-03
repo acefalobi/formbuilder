@@ -31,7 +31,44 @@ def dashboard(request):
         'dashboard': True,
     }
 
-    return render(request, "dashboard.html", variables)
+    return render(request, "dashboard_index.html", variables)
+
+
+@login_required()
+def reports(request):
+    user = request.user
+    user_forms = user.form_set.order_by('-publishedDate')
+
+    user_forms_submission_count = []
+
+    for user_form in user_forms:
+        user_forms_submission_count.append(user_form.formsubmission_set.count())
+
+    variables = {
+        'user_forms_submission_count': user_forms_submission_count,
+        'user_forms': user_forms,
+        'dashboard': True,
+    }
+
+    return render(request, "dashboard_reports.html", variables)
+
+
+@login_required()
+def report(request, form_id):
+    form_to_report = get_object_or_404(Form, id=form_id)
+
+    submissions = form_to_report.formsubmission_set.order_by("-publishedDate")
+
+    if form_to_report.user.username != request.user.username:
+        raise Http404('Form does not exist')
+
+    variables = {
+        'form_to_report': form_to_report,
+        'submissions': submissions,
+        'dashboard': True,
+    }
+
+    return render(request, "dashboard_report.html", variables)
 
 
 def login_redirection_page(request):
@@ -71,12 +108,51 @@ def form_new(request):
         form = FormForm(request.POST)
         if form.is_valid():
             form_to_create = form_save(request, form, False)
-            return HttpResponseRedirect('/forms/' + form_to_create.id)
+            return HttpResponseRedirect('/forms/' + str(form_to_create.id))
 
     else:
         form = FormForm()
 
+    form_title = ""
+    form_json = "[]"
+
+    if request.GET['template'] == 'blank':
+        form_title = ""
+        form_json = "[]"
+    if request.GET['template'] == 'contact':
+        form_title = "Contact Information"
+        form_json = '[{"id": 0,"fieldType": "text","label": "Name"},' \
+                    '{"id": 1,"fieldType": "text","label": "Email"},' \
+                    '{"id": 2,"fieldType": "date","label": "Date Of Birth"},' \
+                    '{"id": 3,"fieldType": "textarea","label": "Address"},' \
+                    '{"id": 4,"fieldType": "text","label": "Phone Number"},' \
+                    '{"id": 5,"fieldType": "textarea","label": "Comments"}]'
+    if request.GET['template'] == 'feedback':
+        form_title = "Customer Feedback"
+        form_json = '[{"id": 0,"fieldType": "radio","label": "Feedback Type",' \
+                    '"options": ["Comments", "Questions", "Bug Reports", "Feature Request"]},' \
+                    '{"id": 1,"fieldType": "textarea","label": "Feedback"},' \
+                    '{"id": 2,"fieldType": "textarea","label": "Suggestions for improvement"},' \
+                    '{"id": 3,"fieldType": "text","label": "Name"},' \
+                    '{"id": 4,"fieldType": "text","label": "Email"}]'
+    if request.GET['template'] == 'event_register':
+        form_title = "Event Registration"
+        form_json = '[{"id": 0,"fieldType": "text","label": "Name"},' \
+                    '{"id": 1,"fieldType": "text","label": "Email"},' \
+                    '{"id": 2,"fieldType": "text","label": "Organization"},' \
+                    '{"id": 3,"fieldType": "text","label": "Phone Number"},' \
+                    '{"id": 4,"fieldType": "radio","label": "Till when, would you be staying?",' \
+                    '"options": ["9 AM","12 PM","3 PM","6 PM","9 PM"]}]'
+    if request.GET['template'] == 'donation_pledge':
+        form_title = "Donation PLedge"
+        form_json = '[{"id": 0,"fieldType": "text","label": "Name"},' \
+                    '{"id": 1,"fieldType": "text","label": "Email"},' \
+                    '{"id": 3,"fieldType": "text","label": "Phone Number"},' \
+                    '{"id": 3,"fieldType": "range","label": "Funds to donate (in NGN)","min": 100,"max": 100000}]'
+
     variables = {
+        'form_title': form_title,
+        'form_json': form_json,
         'form': form
     }
 

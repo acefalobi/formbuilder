@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+    <!--suppress HtmlUnknownTarget -->
+    <div class="container-fluid main-container">
+        <div class="row">
+            <div class="col-md-3 sidebar">
+{#                <div class="sidebar-heading">#}
+{#                    <div class="sidebar-title">Dashboard</div>#}
+{#                </div>#}
+                <div class="sidebar-body">
+                    <a class="btn btn-lg btn-success width-full text-left" onclick="$('#template-select').slideToggle()">
+                        <i class="icon-Pen-5"></i> New Form
+                    </a>
+                    <div id="template-select" class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="panel-title">Select Template...
+                                <div class="panel-options">
+                                    <a class="text-white" onclick="$('#template-select').slideToggle()"><i class="icon-Close"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body text-dark">
+                            <a class="text-link-decorate" href="/forms/new/?template=blank">
+                                <h4><b>Blank Form</b></h4>
+                                <img src="/assets/img/template_blank.png" />
+                            </a>
+                            <a class="text-link-decorate" href="/forms/new/?template=contact">
+                                <h4><b>Contact Form</b></h4>
+                                <img src="/assets/img/template_contact.png" />
+                            </a>
+                            <a class="text-link-decorate" href="/forms/new/?template=feedback">
+                                <h4><b>Customer Feedback Form</b></h4>
+                                <img src="/assets/img/template_feedback.png" />
+                            </a>
+                            <a class="text-link-decorate" href="/forms/new/?template=event_register">
+                                <h4><b>Event Registration Form</b></h4>
+                                <img src="/assets/img/template_event_register.png" />
+                            </a>
+                            <a class="text-link-decorate" href="/forms/new/?template=donation_pledge">
+                                <h4><b>Donation Pledge Form</b></h4>
+                                <img src="/assets/img/template_donation_pledge.png" />
+                            </a>
+                        </div>
+                    </div>
+                    <hr />
+                    <a class="btn btn-lg btn-flat bg-gray width-full text-left" href="/dashboard">
+                        <i class="icon-Dashboard"></i> Dashboard
+                    </a>
+                    <hr />
+                    <a class="btn btn-lg btn-flat bg-gray width-full text-left" href="/dashboard/reports">
+                        <i class="icon-Bar-Chart"></i> Reports
+                    </a>
+                    <hr />
+                    <a class="btn btn-lg btn-flat bg-gray width-full text-left" href="/account">
+                        <i class="icon-Gear"></i> Account Settings
+                    </a>
+                    <hr />
+                    <a class="btn btn-lg btn-flat bg-gray width-full text-left" href="/logout">
+                        <i class="icon-Power-3"></i> Log Out
+                    </a>
+                </div>
+                {#                <a href="/forms/new">#}
+                {#                    <div class="form-preview">#}
+                {#                        <div class="form-title" style="background-color: #2ebf55"></div>#}
+                {#                    </div>#}
+                {#                </a>#}
+            </div>
+            <div class="col-md-9 col-md-offset-3">
+                {% block content_dashboard %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
-{% block title %}Form Submitted Successfully{% endblock %}
+{% block title %}Account Registration Successful{% endblock %}
 {% block content %}
     <header class="header header-full">
         <div class="header-content">
             <div class="header-title container text-center text-white">
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1 header-box">
-                        <h1>Form Submitted Successfully!</h1>
+                        <h1>Account Registered Successfully!</h1>
                         {% if user.is_authenticated %}
                         <a href="/dashboard" class="btn bg-white"><h5>Go To My Dashboard</h5></a>
                         {% else %}

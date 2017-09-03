@@ -1,0 +1,29 @@
+[
+  {
+    "id": 0,
+    "fieldType": "text",
+    "label": "Name"
+  },
+  {
+    "id": 1,
+    "fieldType": "text",
+    "label": "Email"
+  },
+  {
+    "id": 2,
+    "fieldType": "text",
+    "label": "Organization"
+  },
+  {
+    "id": 3,
+    "fieldType": "text",
+    "label": "Phone Number"
+  },
+  {
+    "id": 4,
+    "fieldType": "radio",
+    "label": "Till when, would you be staying?",
+    "options": ["9 AM","12 PM","3 PM","6 PM","9 PM"]
+  }
+]
+

@@ -4,7 +4,7 @@
     <!--suppress JSUnusedAssignment, JSUnresolvedVariable -->
     <div class="form-view main-container">
         <div class="form-head">
-            <h1>{{ form_to_view.title }}</h1>
+            <h1 style="margin-top: 10px">{{ form_to_view.title }}</h1>
         </div>
         <div class="container main-container" style="padding-top: 140px">
             <div class="form-content">
@@ -19,23 +19,59 @@
             <script>
                 var formArray = {{ form_to_view.jsonForm | safe }};
                 var submissionArray = [];
+                var rangeFields = [];
                 var formHtml = '';
                 for (var i = 0; i < formArray.length; i++) {
                     formHtml += '<li>';
-                    formHtml += '<label for="field' + i + '">' + formArray[i].label + ':</label>';
+                    if (formArray[i].fieldType === "range") {
+                        formHtml += '<label for="' + i + '">' + formArray[i].label +
+                            ' (' + formArray[i].min + ' to ' + formArray[i].max + '):</label>';
+                    } else
+                        formHtml += '<label for="' + i + '">' + formArray[i].label + ':</label>';
                     switch (formArray[i].fieldType) {
                         case "text":
-                            formHtml += '<input type="text" name="field' + i + '" placeholder="Enter your answer..." required id="field' + i + '">';
+                            formHtml += '<input class="secondary-input" type="text" name="field' + i + '" placeholder="Enter your answer..." required id="field' + i + '">';
                             break;
                         case "textarea":
-                            formHtml += '<textarea name="field' + i + '" placeholder="Enter your answer..." required id="field' + i + '"></textarea>';
+                            formHtml += '<textarea class="secondary-input" name="field' + i + '" placeholder="Enter your answer..." required id="field' + i + '"></textarea>';
                             break;
                         case "select":
-                            formHtml += '<select id="field' + i + '" name="field' + i + '" required>';
+                            formHtml += '<select class="secondary-input" id="field' + i + '" name="field' + i + '" required>';
                             for (var j = 0; j < formArray[i].options.length; j++) {
                                 formHtml += '<option value="' + formArray[i].options[j] + '">' + formArray[i].options[j] + '</option>';
                             }
                             formHtml += '</select>';
+                            break;
+                        case "checkbox":
+                            formHtml += '<p>';
+                            for (var j = 0; j < formArray[i].options.length; j++) {
+                                formHtml += '<input type="checkbox" id="field' + i + 'check' + j + '" >' +
+                                    '<label for="field' + i + 'check' + j + '"><span><span></span></span>' + formArray[i].options[j] + '</label>';
+                            }
+                            formHtml += '<p></p>';
+                            break;
+                        case "radio":
+                            formHtml += '<p>';
+                            for (var j = 0; j < formArray[i].options.length; j++) {
+                                if (j === 0) {
+                                    formHtml += '<input checked value="' + formArray[i].options[j] + '" name="field' + i + '" type="radio" id="field' + i + 'check' + j + '" required>' +
+                                        '<label for="field' + i + 'check' + j + '"><span><span></span></span>' + formArray[i].options[j] + '</label>';
+                                } else {
+                                    formHtml += '<input name="field' + i + '" value="' + formArray[i].options[j] + '"  type="radio" id="field' + i + 'check' + j + '" required>' +
+                                        '<label for="field' + i + 'check' + j + '"><span><span></span></span>' + formArray[i].options[j] + '</label>';
+                                }
+                            }
+                            formHtml += '<p></p>';
+                            break;
+                        case "range":
+                            formHtml += '<input value="' + formArray[i].min + '" type="range" name="' + i + '" min="' + formArray[i].min +
+                                '" max="' + formArray[i].max  + '" id="field' + i + '">' +
+                                '<h4><b>Value</b>: <span id="range' + i + '">0</span></h4>';
+                            rangeFields.push(i);
+                            break;
+                        case "date":
+                            formHtml += '<input class="secondary-input" type="date" name="field' + i + '" placeholder="Enter your answer..."' +
+                                ' id="field' + i + '">';
                             break;
                         default:
                             break;
@@ -43,6 +79,14 @@
                     formHtml += '</li>'
                 }
                 document.getElementById("form-content").innerHTML = formHtml;
+
+                for (var i = 0; i < rangeFields.length; i++) {
+                    var slider = document.getElementById("field" + rangeFields[i]);
+                    document.getElementById("range" + rangeFields[i]).innerHTML = slider.value; // Display the default slider value
+                    document.getElementById("field" + rangeFields[i]).oninput = function() {
+                        document.getElementById("range" + this.id.substr(5)).innerHTML = this.value;
+                    }
+                }
 
             </script>
         </div>
@@ -55,7 +99,19 @@
             if (!submit) {
                 event.preventDefault();
                 for (var i = 0; i < formArray.length; i++) {
-                    submissionArray.push(document.getElementById("field" + i).value);
+                    if (formArray[i].fieldType === "radio") {
+                        submissionArray.push($("input[name='field" + i + "']").val());
+                    } else if (formArray[i].fieldType === "checkbox") {
+                        var vals = [];
+                        for (var j = 0; j < formArray[i].options.length; j++) {
+                            if (document.getElementById('field' + i + 'check' + j).checked) {
+                                vals.push(formArray[i].options[j]);
+                            }
+                        }
+                        submissionArray.push(vals.join(","));
+                    } else {
+                        submissionArray.push(document.getElementById("field" + i).value);
+                    }
                 }
                 document.getElementById("id_jsonFormSubmission").value = JSON.stringify(submissionArray);
                 submit = true;

@@ -6,11 +6,13 @@ from . import views
 urlpatterns = [
     url(r'^$', views.landing_page, name='landing_page'),
     url(r'^dashboard/$', views.dashboard, name="dashboard"),
+    url(r'^dashboard/reports/$', views.reports, name="dashboard-reports"),
+    url(r'^dashboard/reports/(\d+)/$', views.report, name="dashboard-report"),
 
     # Form Management
     url(r'^forms/(\d+)/$', views.form_view, name="form-view"),
     url(r'^forms/new/', views.form_new, name="form-new"),
-    url(r'^forms/edit/(\d+)/$', views.form_edit, name="form-edit"),
+    # url(r'^forms/edit/(\d+)/$', views.form_edit, name="form-edit"),
     url(r'^forms/delete/(\d+)/$', views.form_delete, name="form-delete"),
     url(r'^forms/submit/success', views.form_submit_success, name="form-submit-success"),
     url(r'^forms/submissions/(\d+)/$', views.form_submissions, name="form-submissions"),

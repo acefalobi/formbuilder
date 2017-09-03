@@ -38,6 +38,7 @@
                     <li><a href="/why-us">Why Us?</a> </li>
                     <li><a href="/blog">Blog</a> </li>
                 </ul>
+                {% block navbar-nav %}{% endblock %}
                 <ul class="nav navbar-nav navbar-right">
                     {% if user.is_authenticated %}
                         {% if dashboard is defined %}
@@ -54,28 +55,6 @@
         </div>
     </nav>
     {% block content %}{% endblock %}
-    <footer>
-        <div id="#contact-section" class="container text-white">
-            <div class="row">
-                <div class="col-md-4">
-                    <h3>About</h3><br />
-                    <ul class="links-list list-group">
-                        <li><a href="/about">About FormBuilder</a></li>
-                        <li><a href="/features">Features</a></li>
-                        <li><a href="/pricing">Blog</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h3>Contact</h3><br />
-                    <ul class="links-list list-group">
-                        <li><a href="mailto:support@formbuilder.com">support@formbuilder.com</a></li>
-                        <li><a href="tel:+2348012345678">(+234) 801-234-5678</a></li>
-                        <li><a href="/faq">FAQs</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </footer>
 </div>
 </body>
 

@@ -1,0 +1,31 @@
+[
+  {
+    "id": 0,
+    "fieldType": "radio",
+    "label": "Feedback Type",
+    "options": [
+      "Comments", "Questions", "Bug Reports", "Feature Request"
+    ]
+  },
+  {
+    "id": 1,
+    "fieldType": "textarea",
+    "label": "Feedback"
+  },
+  {
+    "id": 2,
+    "fieldType": "textarea",
+    "label": "Suggestions for improvement"
+  },
+  {
+    "id": 3,
+    "fieldType": "text",
+    "label": "Name"
+  },
+  {
+    "id": 4,
+    "fieldType": "text",
+    "label": "Email"
+  }
+]
+

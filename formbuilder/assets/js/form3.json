@@ -1,0 +1,25 @@
+[
+  {
+    "id": 0,
+    "fieldType": "text",
+    "label": "Name"
+  },
+  {
+    "id": 1,
+    "fieldType": "text",
+    "label": "Email"
+  },
+  {
+    "id": 3,
+    "fieldType": "text",
+    "label": "Phone Number"
+  },
+  {
+    "id": 3,
+    "fieldType": "range",
+    "label": "Funds to donate (in NGN)",
+    "min": 100,
+    "max": 100000
+  }
+]
+

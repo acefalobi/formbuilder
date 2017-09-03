@@ -4,7 +4,7 @@
     <!--suppress JSUnusedAssignment, JSUnresolvedVariable -->
     <div class="form-view main-container">
         <div class="form-head">
-            <h1>{{ form_to_view.title }}</h1>
+            <h1 style="margin-top: 10px">{{ form_to_view.title }}</h1>
         </div>
         <div class="container main-container" style="padding-top: 140px">
 
@@ -22,43 +22,27 @@
 
             <script>
                 var formArray = {{ form_to_view.jsonForm | safe }};
-                var headHtml = '';
+                var headHtml = '<th>S/N</th>';
                 for (var i = 0; i < formArray.length; i++) {
                     headHtml += '<th>';
                     headHtml += formArray[i].label;
-                    headHtml += '</li>'
+                    headHtml += '</th>'
                 }
                 document.getElementById("table-head-row").innerHTML = headHtml;
 
                 {% for submission in submissions %}
                     var submissionArray{{ forloop.counter0 }} = {{ submission.jsonSubmission | safe }};
-                    var bodyHtml{{ forloop.counter0 }} = '';
+                    var bodyHtml{{ forloop.counter0 }} = '<th>{{ forloop.counter }}</th>';
                     for (var i = 0; i < submissionArray{{ forloop.counter0 }}.length; i++) {
                         bodyHtml{{ forloop.counter0 }} += '<th>';
                         bodyHtml{{ forloop.counter0 }} += submissionArray{{ forloop.counter0 }}[i];
-                        bodyHtml{{ forloop.counter0 }} += '</li>'
+                        bodyHtml{{ forloop.counter0 }} += '</th>'
                     }
                     document.getElementById("table-body-row-{{ forloop.counter0 }}").innerHTML = bodyHtml{{ forloop.counter0 }};
                 {% endfor %}
-
-
             </script>
         </div>
     </div>
 {% endblock %}
 {% block js %}
-    <script>
-        var submit = false;
-        $('form#main-form').submit(function (event) {
-            if (!submit) {
-                event.preventDefault();
-                for (var i = 0; i < formArray.length; i++) {
-                    submissionArray.push(document.getElementById("field" + i).value);
-                }
-                document.getElementById("id_jsonFormSubmission").value = JSON.stringify(submissionArray);
-                submit = true;
-                $('form#main-form').submit();
-            }
-        });
-    </script>
 {% endblock %}
