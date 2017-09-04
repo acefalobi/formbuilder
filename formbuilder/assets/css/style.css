@@ -449,6 +449,7 @@ textarea {
 
 .sidebar {
     background: #eeeeee;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
     height: calc(100% - 68px);
     overflow-y: scroll;
     padding: 0;
@@ -603,6 +604,12 @@ textarea {
 
 .form-preview .form-actions {
     padding: 10px 20px;
+}
+
+.form-preview .form-footer {
+    border-top: 1px solid #cccccc;
+    padding: 10px 20px;
+    text-align: center;
 }
 
 .form-view {

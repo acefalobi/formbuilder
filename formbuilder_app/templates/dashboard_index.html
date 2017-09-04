@@ -16,11 +16,13 @@
                                 {{ user_form.title }}
                             </div>
                             <div class="form-actions">
-                                <a title="Open" class="btn bg-primary width-full" href="/forms/{{ user_form.id }}"><i class="icon-Preview"></i>View Form</a>
-                                <a title="Check Submissions" class="btn bg-primary width-full" href="/forms/submissions/{{ user_form.id }}">
-                                    <i class="icon-Folder-Archive"></i>Submissions ({{ user_form.formsubmission_set.count }})
+                                <a title="Check Submissions" class="btn bg-primary width-full" href="/dashboard/forms/submissions/{{ user_form.id }}">
+                                    <i class="icon-Folder-Archive"></i>View Submissions ({{ user_form.formsubmission_set.count }})
                                 </a>
-                                <button onclick="document.getElementById('delete-link').setAttribute('href', '/forms/delete/{{ user_form.id }}')" title="Check Submissions" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger width-full">
+                            </div>
+                            <div class="form-footer">
+                                <a title="Open" class="btn bg-primary" href="/forms/{{ user_form.id }}"><i class="icon-Preview"></i>View Form</a>
+                                <button onclick="document.getElementById('delete-link').setAttribute('href', '/forms/delete/{{ user_form.id }}')" title="Check Submissions" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger">
                                     <i class="icon-Trash-withMen"></i>Delete
                                 </button>
                             </div>

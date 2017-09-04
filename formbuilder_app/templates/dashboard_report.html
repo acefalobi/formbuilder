@@ -40,58 +40,104 @@
                 case 'range': {
                     var labels = [];
                     var data = [];
-                    var label = 'Responses to: "' + field.label + '"';
+                    var label = 'Response to: "' + field.label + '"';
 
                     {% for submission in submissions %}
                         var submissionArray = [];
                         submissionArray = {{ submission.jsonSubmission | safe }};
-                        labels.push("Submission {{ forloop.counter }}");
+                        labels.push("");
                         data.push(submissionArray[i]);
                     {% endfor %}
 
-                    charts.push({id: i, labels: labels, data: data, label: label, type: "bar"});
+                    charts.push({id: i, labels: labels, data: data, label: label, type: "line", min: field.min, max: field.max});
 
-                    document.getElementById("report-content").innerHTML += '\n' +
-                        '        <div class="col-md-6">\n' +
-                        '            <div class="panel panel-primary">\n' +
-                        '                <div class="panel-heading">\n' +
-                        '                    <div class="panel-title">' + label + ' (Bar Chart)</div>\n' +
-                        '                </div>\n' +
-                        '                <div class="panel-body">\n' +
-                        '\n' +
-                        '                    <canvas id="chart' + i + '" width="100%" height="100%"></canvas>\n' +
-                        '                </div>\n' +
-                        '            </div>\n' +
-                        '        </div>;';
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Line Chart", i);
 
                     break;
                 }
-                case 'radio' || 'select': {
+                case 'radio':
+                case 'select': {
                     var labels = [];
                     var data = [];
-                    var label = 'Responses to: "' + field.label + '"';
+                    var label = 'Response to: "' + field.label + '"';
 
                     {% for submission in submissions %}
                         var submissionArray = [];
                         submissionArray = {{ submission.jsonSubmission | safe }};
-                        labels.push("Submission {{ forloop.counter }}");
                         data.push(submissionArray[i]);
                     {% endfor %}
 
-                    charts.push({id: i, labels: labels, data: data, label: label, type: "bar"});
+                    var frequencyArray = frequecy(data);
 
-                    document.getElementById("report-content").innerHTML += '\n' +
-                        '        <div class="col-md-6">\n' +
-                        '            <div class="panel panel-primary">\n' +
-                        '                <div class="panel-heading">\n' +
-                        '                    <div class="panel-title">' + label + ' (Bar Chart)</div>\n' +
-                        '                </div>\n' +
-                        '                <div class="panel-body">\n' +
-                        '\n' +
-                        '                    <canvas id="chart' + i + '" width="100%" height="100%"></canvas>\n' +
-                        '                </div>\n' +
-                        '            </div>\n' +
-                        '        </div>;';
+                    labels = frequencyArray[0];
+                    data = frequencyArray[1];
+
+                    charts.push({id: i + "0", labels: labels, data: data, label: label, type: "bar", min: 0});
+
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Bar Chart", i + "0");
+
+                    charts.push({id: i + "1", labels: labels, data: data, label: label, type: "pie"});
+
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Pie Chart", i + "1");
+
+                    break;
+                }
+                case 'checkbox': {
+                    var labels = [];
+                    var data = [];
+                    var label = 'Response to: "' + field.label + '"';
+
+                    {% for submission in submissions %}
+                        var submissionArray = [];
+                        submissionArray = {{ submission.jsonSubmission | safe }};
+                        var allData = submissionArray[i].split(",");
+                        for (var j = 0; j < allData.length; j++) {
+                            data.push(allData[j]);
+                        }
+                    {% endfor %}
+
+                    var frequencyArray = frequecy(data);
+
+                    labels = frequencyArray[0];
+                    data = frequencyArray[1];
+
+                    charts.push({id: i + "0", labels: labels, data: data, label: label, type: "bar", min: 0});
+
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Bar Chart", i + "0");
+
+                    charts.push({id: i + "1", labels: labels, data: data, label: label, type: "pie"});
+
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Pie Chart", i + "1");
+
+                    break;
+                }
+                case 'date': {
+                    var labels = [];
+                    var data = [];
+                    var label = 'Response to: "' + field.label + '"';
+
+                    {% for submission in submissions %}
+                        var submissionArray = [];
+                        submissionArray = {{ submission.jsonSubmission | safe }};
+                        data.push(submissionArray[i].substr(0, 4));
+                    {% endfor %}
+
+                    var frequencyArray = frequecy(data);
+
+                    labels = frequencyArray[0];
+                    data = frequencyArray[1];
+
+                    charts.push({id: i + "0", labels: labels, data: data, label: label, type: "bar", min: 0});
+
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Bar Chart", i + "0");
+
+                    charts.push({id: i + "1", labels: labels, data: data, label: label, type: "line", min: 0});
+
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Line Chart", i + "1");
+
+                    charts.push({id: i + "2", labels: labels, data: data, label: label, type: "pie"});
+
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Pie Chart", i + "2");
 
                     break;
                 }
@@ -103,7 +149,41 @@
         for (var j = 0; j < charts.length; j++) {
             var canvasContext = document.getElementById("chart" + charts[j].id).getContext('2d');
             switch (charts[j].type) {
-                case 'bar' || 'horizontalBar':
+                case 'bar':
+                case 'horizontalBar':
+                case 'line':
+                    var chart = new Chart(canvasContext, {
+                        type: charts[j].type,
+                        data: {
+                            labels: charts[j].labels,
+                            datasets: [{
+                                label: charts[j].label,
+                                data: charts[j].data,
+                                backgroundColor: 'rgba(0, 0, 0, 0)',
+                                borderColor: '#AD1457',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            elements: {
+                                line: {
+                                    tension: 0
+                                }
+                            },
+                            scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        suggestedMin: charts[j].min,
+                                        suggestedMax: charts[j].max
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                    charts[j].chart = chart;
+                    break;
+                case 'pie':
+                case 'doughnut':
                     var chart = new Chart(canvasContext, {
                         type: charts[j].type,
                         data: {
@@ -115,15 +195,6 @@
                                 borderColor: '#AD1457',
                                 borderWidth: 1
                             }]
-                        },
-                        options: {
-                            scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero: true
-                                    }
-                                }]
-                            }
                         }
                     });
                     charts[j].chart = chart;
@@ -146,5 +217,37 @@
         {#                }]#}
         {#            }#}
         {#        });#}
+
+        function createReportHtml(label, chartType, id) {
+            return '\n' +
+                '        <div class="col-md-6 col-lg-4">\n' +
+                '            <div class="panel panel-primary">\n' +
+                '                <div class="panel-heading">\n' +
+                '                    <div class="panel-title">' + label + ' (' + chartType + ')</div>\n' +
+                '                </div>\n' +
+                '                <div class="panel-body">\n' +
+                '\n' +
+                '                    <canvas id="chart' + id + '" width="100%" height="100%"></canvas>\n' +
+                '                </div>\n' +
+                '            </div>\n' +
+                '        </div>';
+        }
+
+        function frequecy(arr) {
+            var a = [], b = [], prev;
+
+            arr.sort();
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] !== prev) {
+                    a.push(arr[i]);
+                    b.push(1);
+                } else {
+                    b[b.length - 1]++;
+                }
+                prev = arr[i];
+            }
+
+            return [a, b]
+        }
     </script>
 {% endblock %}

@@ -1,12 +1,9 @@
-{% extends "base.html" %}
+{% extends "dashboard_base.html" %}
 {% block title %}Submissions for: {{ form_to_view.title }}{% endblock %}
-{% block content %}
+{% block content_dashboard %}
+    <h1><b>{{ form_to_view.title }}</b> Submissions</h1><br />
     <!--suppress JSUnusedAssignment, JSUnresolvedVariable -->
-    <div class="form-view main-container">
-        <div class="form-head">
-            <h1 style="margin-top: 10px">{{ form_to_view.title }}</h1>
-        </div>
-        <div class="container main-container" style="padding-top: 140px">
+        <div class="width-full">
 
             <table class="table">
                 <thead>
@@ -42,7 +39,6 @@
                 {% endfor %}
             </script>
         </div>
-    </div>
 {% endblock %}
 {% block js %}
 {% endblock %}

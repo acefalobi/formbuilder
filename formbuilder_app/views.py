@@ -257,7 +257,7 @@ def form_submissions(request, form_id):
         'submissions': submissions
     }
 
-    return render(request, 'form_submissions.html', variables)
+    return render(request, 'dashboard_form_submissions.html', variables)
 
 
 @login_required()

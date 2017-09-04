@@ -108,14 +108,15 @@
                                 vals.push(formArray[i].options[j]);
                             }
                         }
+                        console.log(vals.join(","));
                         submissionArray.push(vals.join(","));
                     } else {
                         submissionArray.push(document.getElementById("field" + i).value);
                     }
                 }
                 document.getElementById("id_jsonFormSubmission").value = JSON.stringify(submissionArray);
-                submit = true;
-                $('form#main-form').submit();
+{#                submit = true;#}
+{#                $('form#main-form').submit();#}
             }
         });
     </script>
