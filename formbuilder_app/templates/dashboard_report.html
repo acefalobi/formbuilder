@@ -49,9 +49,9 @@
                         data.push(submissionArray[i]);
                     {% endfor %}
 
-                    charts.push({id: i, labels: labels, data: data, label: label, type: "line", min: field.min, max: field.max});
+                    charts.push({id: i, labels: labels, data: data, label: label, type: "bar", min: field.min - 1, max: field.max});
 
-                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Line Chart", i);
+                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Bar Chart", i);
 
                     break;
                 }
@@ -130,10 +130,6 @@
                     charts.push({id: i + "0", labels: labels, data: data, label: label, type: "bar", min: 0});
 
                     document.getElementById("report-content").innerHTML += createReportHtml(label, "Bar Chart", i + "0");
-
-                    charts.push({id: i + "1", labels: labels, data: data, label: label, type: "line", min: 0});
-
-                    document.getElementById("report-content").innerHTML += createReportHtml(label, "Line Chart", i + "1");
 
                     charts.push({id: i + "2", labels: labels, data: data, label: label, type: "pie"});
 

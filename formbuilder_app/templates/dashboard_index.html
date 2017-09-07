@@ -5,26 +5,61 @@
     <br>
     <div class="panel panel-primary">
         <div class="panel-heading">
-            <div class="panel-title">My Forms</div>
+            <div class="panel-title">Recent Forms</div>
         </div>
         <div class="panel-body">
             <div class="row">
-                {% for user_form in user_forms %}
+                {% for recent_form in recent_forms %}
                     <div class="col-md-4">
                         <div class="form-preview">
                             <div class="form-title">
-                                {{ user_form.title }}
+                                {{ recent_form.title }}
                             </div>
-                            <div class="form-actions">
-                                <a title="Check Submissions" class="btn bg-primary width-full" href="/dashboard/forms/submissions/{{ user_form.id }}">
-                                    <i class="icon-Folder-Archive"></i>View Submissions ({{ user_form.formsubmission_set.count }})
+                            <div class="form-actions text-center width-full">
+                                <a class="btn btn-flat" style="margin-bottom: 0" title="Check Submissions" href="/dashboard/forms/submissions/{{ recent_form.id }}">
+                                    <i class="icon-Folder-Archive text-primary"></i> &nbsp;View Submissions ({{ recent_form.formsubmission_set.count }})
                                 </a>
                             </div>
                             <div class="form-footer">
-                                <a title="Open" class="btn bg-primary" href="/forms/{{ user_form.id }}"><i class="icon-Preview"></i>View Form</a>
-                                <button onclick="document.getElementById('delete-link').setAttribute('href', '/forms/delete/{{ user_form.id }}')" title="Check Submissions" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger">
+                                <a title="Open" class="btn bg-primary" style="margin-bottom: 0" href="/forms/{{ recent_form.id }}"><i class="icon-Preview"></i>View Form</a>
+                                <button style="margin-bottom: 0" onclick="document.getElementById('delete-link').setAttribute('href', '/forms/delete/{{ recent_form.id }}')" title="Check Submissions" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger">
                                     <i class="icon-Trash-withMen"></i>Delete
                                 </button>
+                            </div>
+                            <div class="form-footer">
+                                <h5 class="text-center">Published: {{ recent_form.publishedDate }}</h5>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="panel-title">All Forms</div>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                {% for all_form in all_forms %}
+                    <div class="col-md-4">
+                        <div class="form-preview">
+                            <div class="form-title">
+                                {{ all_form.title }}
+                            </div>
+                            <div class="form-actions text-center width-full">
+                                <a class="btn btn-flat" style="margin-bottom: 0" title="Check Submissions" href="/dashboard/forms/submissions/{{ all_form.id }}">
+                                    <i class="icon-Folder-Archive text-primary"></i> &nbsp;View Submissions ({{ all_form.formsubmission_set.count }})
+                                </a>
+                            </div>
+                            <div class="form-footer">
+                                <a title="Open" class="btn bg-primary" style="margin-bottom: 0" href="/forms/{{ all_form.id }}"><i class="icon-Preview"></i>View Form</a>
+                                <button style="margin-bottom: 0" onclick="document.getElementById('delete-link').setAttribute('href', '/forms/delete/{{ all_form.id }}')" title="Check Submissions" data-toggle="modal" data-target="#delete-modal" class="btn btn-danger">
+                                    <i class="icon-Trash-withMen"></i>Delete
+                                </button>
+                            </div>
+                            <div class="form-footer">
+                                <h5 class="text-center">Published: {{ all_form.publishedDate }}</h5>
                             </div>
                         </div>
                     </div>

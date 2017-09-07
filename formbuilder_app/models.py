@@ -19,4 +19,4 @@ class FormSubmission(models.Model):
     publishedDate = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.form
+        return self.form.title + " submission"

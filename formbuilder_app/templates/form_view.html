@@ -16,27 +16,59 @@
                 </form>
             </div>
 
+            <!--suppress JSDuplicatedDeclaration -->
             <script>
                 var formArray = {{ form_to_view.jsonForm | safe }};
-                var submissionArray = [];
-                var rangeFields = [];
-                var formHtml = '';
+                var submissionArray = [], rangeFields = [], formHtml = '', prevField = "";
                 for (var i = 0; i < formArray.length; i++) {
-                    formHtml += '<li>';
+                    if (formArray[i].fieldType === "display-text")
+                        formHtml += '<li style="list-style: none; margin-left: -25px"><br />';
+                    else {
+                        if (prevField.fieldType === "display-text")
+                            formHtml += '<li value=' + i + '>';
+                        else
+                            formHtml += '<li>';
+                    }
+                    var asteriskStr = "";
+                    var requiredStr = "";
+                    if (formArray[i].required) {
+                        asteriskStr = "<span class='text-danger'>*</span>";
+                        requiredStr = 'required="yes"';
+                    }
+
                     if (formArray[i].fieldType === "range") {
-                        formHtml += '<label for="' + i + '">' + formArray[i].label +
-                            ' (' + formArray[i].min + ' to ' + formArray[i].max + '):</label>';
+                        formHtml += '<label for="field' + i + '">' + formArray[i].label +
+                            ' (' + formArray[i].min + ' to ' + formArray[i].max + ')' + asteriskStr + '</label>';
                     } else
-                        formHtml += '<label for="' + i + '">' + formArray[i].label + ':</label>';
+                        formHtml += '<label for="field' + i + '">' + formArray[i].label + asteriskStr + '</label>';
                     switch (formArray[i].fieldType) {
+                        case "display-text":
+                            formHtml += '<p class="text-muted">' + formArray[i].moreInfo + '</p><br />';
+                            break;
                         case "text":
-                            formHtml += '<input class="secondary-input" type="text" name="field' + i + '" placeholder="Enter your answer..." required id="field' + i + '">';
+                            formHtml += '<input ' + requiredStr + ' class="secondary-input" type="text" name="field' + i + '" placeholder="Enter answer..." id="field' + i + '">';
+                            break;
+                        case "number":
+                            formHtml += '<input ' + requiredStr + ' class="secondary-input" type="number" name="field' + i + '" min="' + formArray[i].min +
+                                '" max="' + formArray[i].max  + '" placeholder="Enter number..."' + ' id="field' + i + '">';
+                            break;
+                        case "email":
+                            formHtml += '<input ' + requiredStr + ' class="secondary-input" type="email" name="field' + i + '" placeholder="Enter email..."' +
+                                ' id="field' + i + '">';
+                            break;
+                        case "tel":
+                            formHtml += '<input ' + requiredStr + ' class="secondary-input" type="tel" name="field' + i + '" placeholder="Enter phone number..."' +
+                                ' id="field' + i + '">';
+                            break;
+                        case "url":
+                            formHtml += '<input ' + requiredStr + ' class="secondary-input" type="url" name="field' + i + '" placeholder="http://..."' +
+                                ' id="field' + i + '">';
                             break;
                         case "textarea":
-                            formHtml += '<textarea class="secondary-input" name="field' + i + '" placeholder="Enter your answer..." required id="field' + i + '"></textarea>';
+                            formHtml += '<textarea ' + requiredStr + ' class="secondary-input" name="field' + i + '" placeholder="Enter answer..." id="field' + i + '"></textarea>';
                             break;
                         case "select":
-                            formHtml += '<select class="secondary-input" id="field' + i + '" name="field' + i + '" required>';
+                            formHtml += '<select ' + requiredStr + ' class="secondary-input" id="field' + i + '" name="field' + i + '">';
                             for (var j = 0; j < formArray[i].options.length; j++) {
                                 formHtml += '<option value="' + formArray[i].options[j] + '">' + formArray[i].options[j] + '</option>';
                             }
@@ -54,10 +86,10 @@
                             formHtml += '<p>';
                             for (var j = 0; j < formArray[i].options.length; j++) {
                                 if (j === 0) {
-                                    formHtml += '<input checked value="' + formArray[i].options[j] + '" name="field' + i + '" type="radio" id="field' + i + 'check' + j + '" required>' +
+                                    formHtml += '<input ' + requiredStr + ' checked value="' + formArray[i].options[j] + '" name="field' + i + '" type="radio" id="field' + i + 'check' + j + '">' +
                                         '<label for="field' + i + 'check' + j + '"><span><span></span></span>' + formArray[i].options[j] + '</label>';
                                 } else {
-                                    formHtml += '<input name="field' + i + '" value="' + formArray[i].options[j] + '"  type="radio" id="field' + i + 'check' + j + '" required>' +
+                                    formHtml += '<input ' + requiredStr + ' name="field' + i + '" value="' + formArray[i].options[j] + '"  type="radio" id="field' + i + 'check' + j + '">' +
                                         '<label for="field' + i + 'check' + j + '"><span><span></span></span>' + formArray[i].options[j] + '</label>';
                                 }
                             }
@@ -65,18 +97,19 @@
                             break;
                         case "range":
                             formHtml += '<input value="' + formArray[i].min + '" type="range" name="' + i + '" min="' + formArray[i].min +
-                                '" max="' + formArray[i].max  + '" id="field' + i + '">' +
+                                '" max="' + formArray[i].max  + '" id="field' + i + '" ' + requiredStr + '>' +
                                 '<h4><b>Value</b>: <span id="range' + i + '">0</span></h4>';
                             rangeFields.push(i);
                             break;
                         case "date":
-                            formHtml += '<input class="secondary-input" type="date" name="field' + i + '" placeholder="Enter your answer..."' +
-                                ' id="field' + i + '">';
+                            formHtml += '<input class="secondary-input" type="date" name="field' + i + '" placeholder="Enter date..."' +
+                                ' id="field' + i + '" ' + requiredStr + '>';
                             break;
                         default:
                             break;
                     }
                     formHtml += '</li>'
+                    prevField = formArray[i];
                 }
                 document.getElementById("form-content").innerHTML = formHtml;
 
@@ -94,6 +127,28 @@
 {% endblock %}
 {% block js %}
     <script>
+        var geoLocation = "";
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(getAddress);
+            } else {
+                console.error("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function getAddress(position) {
+            $.ajax({
+                method: 'GET',
+                url: 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
+                position.coords.latitude + ',' + position.coords.longitude + '&key=AIzaSyCfVmi1UHHmKjFCB-0H630c4czE2ynAWOI'
+            }).done(function (data) {
+                if (data.results[data.results.length - 2].formatted_address)
+                    geoLocation = data.results[data.results.length - 2].formatted_address;
+            });
+
+        }
+        getLocation();
+
         var submit = false;
         $('form#main-form').submit(function (event) {
             if (!submit) {
@@ -108,15 +163,15 @@
                                 vals.push(formArray[i].options[j]);
                             }
                         }
-                        console.log(vals.join(","));
                         submissionArray.push(vals.join(","));
                     } else {
                         submissionArray.push(document.getElementById("field" + i).value);
                     }
                 }
+                submissionArray.push(geoLocation);
                 document.getElementById("id_jsonFormSubmission").value = JSON.stringify(submissionArray);
-{#                submit = true;#}
-{#                $('form#main-form').submit();#}
+                submit = true;
+                $('form#main-form').submit();
             }
         });
     </script>

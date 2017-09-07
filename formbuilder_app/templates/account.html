@@ -1,0 +1,55 @@
+{% extends "dashboard_base.html" %}
+{% block title %}My Account{% endblock %}
+{% block content_dashboard %}
+    <!--suppress HtmlUnknownTarget -->
+    <h1 class="text-center">Edit Account</h1>
+    <br>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="panel-title">Personal Information</div>
+        </div>
+        <div class="panel-body">
+            <form action="." method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6" style="padding-left: 15px">
+                        <label for="id_username">Username:</label>
+                        <input disabled value="{{ form.username.value }}" type="text" class="secondary-input" name="{{ form.username.html_name }}" placeholder="Enter a username..." maxlength="30" required="" id="id_username">
+                        {{ form.username.errors }}<br />
+                    </div>
+                    <div class="col-md-6" style="padding-left: 15px">
+                        <label for="id_email">Email:</label>
+                        <input disabled value="{{ form.email.value }}" type="email" class="secondary-input" name="{{ form.email.html_name }}" placeholder="Enter an email..." required="" id="id_email">
+                        {{ form.email.errors }}<br />
+                    </div>
+                    <div class="col-md-6" style="padding-left: 15px">
+                        <label for="id_first_name">First Name:</label>
+                        <input value="{{ form.first_name.value }}" type="text" class="secondary-input" name="{{ form.first_name.html_name }}" placeholder="Enter your first name..." id="id_first_name">
+                        {{ form.first_name.errors }}<br />
+                    </div>
+                    <div class="col-md-6" style="padding-left: 15px">
+                        <label for="id_last_name">Last Name:</label>
+                        <input value="{{ form.last_name.value }}" type="text" class="secondary-input" name="{{ form.last_name.html_name }}" placeholder="Enter your last name..." id="id_last_name">
+                        {{ form.last_name.errors }}<br />
+                    </div>
+                    <div class="col-md-6" style="padding-left: 15px">
+                        <label for="id_password1">New Password:</label>
+                        <input value="{{ form.password1.value }}" type="password" class="secondary-input" name="{{ form.password1.html_name }}" placeholder="Enter your new password..." id="id_password1">
+                        {{ form.password1.errors }}
+                    </div>
+                    <div class="col-md-6" style="padding-left: 15px">
+                        <label for="id_password2">Confirm New Password:</label>
+                        <input value="{{ form.password2.value }}" type="password" class="secondary-input" name="{{ form.password2.html_name }}" placeholder="Confirm your new password..." id="id_password2">
+                        {{ form.password2.errors }}
+                    </div>
+                    <div class="col-md-12">
+                        {{ form.non_field_errors }}
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-success">Save Changes</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

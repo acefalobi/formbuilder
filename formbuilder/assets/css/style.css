@@ -1,10 +1,8 @@
-@font-face {
-    font-family: "Open Sans";
-    /*noinspection CssUnknownTarget*/
-    src: url(/assets/fonts/OpenSans-Light.ttf);
+/* General Initialization */
+* {
+    text-rendering: geometricPrecision;
 }
 
-/* General Initialization */
 html {
     height: 100%;
 }
@@ -18,6 +16,10 @@ body {
 
 .body {
     height: 100%;
+}
+
+.display-inline {
+  display: inline;
 }
 
 hr {
@@ -49,15 +51,14 @@ hr {
 }
 
 .btn.btn-flat {
-    background-color: rgba(255, 255, 255, .7);
+    background-color: #fafafa;
     color: #AD1457;
     box-shadow: none;
 }
 
 .btn.btn-flat:hover, .btn.btn-flat:active, .btn.btn-flat:focus {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: #FFFFFF;
     color: #AD1457;
-    box-shadow: none;
 }
 
 .btn:hover, .btn:active, .btn:focus {
@@ -87,10 +88,15 @@ a.text-link-decorate:hover, a.text-link-decorate:focus, a.text-link-decorate:act
 
 ul.errorlist {
     background: #bb0000;
+    color: #FFFFFF;
     border-radius: 3px;
     list-style: none;
     padding: 10px;
     margin-top: 5px;
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .text-small {
@@ -108,6 +114,10 @@ ul.errorlist {
 
 .no-margin {
     margin: 0 !important;
+}
+
+.no-margin-bottom {
+    margin-bottom: 0 !important;
 }
 
 .no-margin-left {
@@ -130,8 +140,16 @@ ul.errorlist {
 .overlay {
     background-color: rgba(173, 20, 87, .8);
     height: 100%;
-    position: absolute;
+    left: 0;
+    position: fixed;
+    -webkit-transition: all .25s ease-in-out;
+    -moz-transition: all .25s ease-in-out;
+    -ms-transition: all .25s ease-in-out;
+    -o-transition: all .25s ease-in-out;
+    transition: all .25s ease-in-out;
+    top: 0;
     width: 100%;
+    z-index: 1031;
 }
 
 .overlay-left {
@@ -326,21 +344,21 @@ input[type="radio"]:checked + label > span > span {
 }
 
 input[type="text"]:not(button), input[type="number"]:not(button), input[type="date"]:not(button), input[type="email"]:not(button), input[type="password"]:not(button),
-textarea:not(button), select:not(button), input[type="tel"]:not(button), input[type="url"]:not(button),
+textarea:not(button), select:not(button), input[type="tel"]:not(button), input[type="url"]:not(button), input[type="file"]:not(button),
 input[type="search"]:not(button) {
     background: #fff;
     margin-bottom: 20px;
 }
 
 input[type="text"], input[type="number"], input[type="date"],input[type="email"], input[type="password"], textarea, select, input[type="tel"],
-input[type="url"], input[type="search"] {
+input[type="url"], input[type="search"], input[type="file"] {
     border: none;
     border-radius: 5px;
     padding: 13px;
 }
 
 input[type='text'], input[type="number"], input[type="date"], input[type='address'], input[type='url'], input[type='password'], input[type='email'],
-input[type="search"], input[type="tel"] {
+input[type="search"], input[type="tel"], input[type="file"] {
     color: #444;
     height: 40px;
     padding-left: 26px;
@@ -397,6 +415,7 @@ textarea {
     font-size: 18pt;
     font-weight: 600;
     height: 100%;
+    line-height: 48px;
     /*margin-top: -3px;*/
     padding: 0;
 }
@@ -415,6 +434,8 @@ textarea {
 
 .navbar .navbar-left > li > a {
     color: #eeeeee;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .navbar .navbar-left > li:first-child {
@@ -434,6 +455,8 @@ textarea {
 
 .navbar .navbar-right > li > a {
     color: #eeeeee;
+    letter-spacing: 1px;
+    text-transform: uppercase;
 }
 
 .navbar .navbar-right > li > a:hover, .navbar .navbar-nav > li > a:focus, .navbar .navbar-nav > li > a:active {
@@ -450,11 +473,11 @@ textarea {
 .sidebar {
     background: #eeeeee;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
-    height: calc(100% - 68px);
+    height: calc(100% - 66px);
     overflow-y: scroll;
     padding: 0;
     position: fixed;
-    top: 66px;
+    top: 62px;
 }
 
 .sidebar::-webkit-scrollbar-track {
@@ -572,7 +595,7 @@ textarea {
 }
 
 .main-container {
-    padding-top: 67px;
+    padding-top: 100px;
     padding-bottom: 70px;
 }
 
@@ -613,7 +636,7 @@ textarea {
 }
 
 .form-view {
-    padding-top: 66px;
+    padding-top: 62px;
     width: 100%;
 }
 
@@ -643,6 +666,14 @@ textarea {
 
 .form-view .form-content {
     font-size: large;
+}
+
+.form-view .form-content label {
+    font-weight: normal;
+}
+
+.form-view .form-content p {
+    font-size: medium;
 }
 
 .form-view .form-content > button {
@@ -713,6 +744,7 @@ table.table > thead > tr > th {
 table.table > tbody > tr > th {
     border-right: 1px solid #AD1457;
     border-top: 1px solid #ccc;
+    font-weight: normal;
 }
 
 /* End Dashboard Section */

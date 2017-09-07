@@ -9,8 +9,9 @@
   },
   {
     "id": 1,
-    "fieldType": "textarea",
-    "label": "Feedback"
+    "fieldType": "display-text",
+    "label": "My Title",
+    "moreInfo": "My Extra Info. Story story story"
   },
   {
     "id": 2,

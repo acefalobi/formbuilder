@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block title %}Create New Form{% endblock %}
 {% block navbar-nav %}
-{#    <li><a class="btn btn-outline border-primary" href="/register" style="padding: 10px 20px; margin-top: 4px">Register</a> </li>#}
+    {#    <li><a class="btn btn-outline border-primary" href="/register" style="padding: 10px 20px; margin-top: 4px">Register</a> </li>#}
 {% endblock %}
 {% block content %}
-    <!--suppress JSUnusedAssignment, JSUnresolvedVariable, XmlDefaultAttributeValue -->
+    <!--suppress JSUnusedAssignment, JSUnresolvedVariable, XmlDefaultAttributeValue, HtmlUnknownTarget -->
     <div class="form-view form-edit main-container">
         <form id="main-form" action="." method="post">
             {% csrf_token %}
@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div>
-            <div class="container main-container" style="padding-top: 140px">
+            <div class="container-fluid main-container">
                 <div class="row">
                     <div class="col-md-4">
                         {{ form.non_field_errors }}
@@ -68,34 +68,140 @@
                                 <div class="panel-title">Add Field</div>
                             </div>
                             <div class="panel-body">
-                                <button {# draggable="true" #} ondragstart="dragField(event)" onclick="fieldType='text';
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <b>Text Fields</b>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button {# draggable="true" #} ondragstart="dragField(event)" onclick="fieldType='text';
                                 document.getElementById('set-options').style.display = 'none';
-                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
-                                    <i class="icon-Normal-Text"></i> &nbsp; Text Field</button>
-                                <button onclick="fieldType='textarea';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Normal-Text"></i> &nbsp; Single Line Text</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='textarea';
                                 document.getElementById('set-options').style.display = 'none';
-                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
-                                    <i class="icon-Text-Box"></i> &nbsp; Text Area</button>
-                                <button onclick="fieldType='select';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Text-Box"></i> &nbsp; Multi-line Text</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='number';
+                                document.getElementById('set-options').style.display = 'none';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'block'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Numbering-List"></i> &nbsp; Number</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='email';
+                                document.getElementById('set-options').style.display = 'none';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-At-Sign"></i> &nbsp; Email</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='tel';
+                                document.getElementById('set-options').style.display = 'none';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'block';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Phone"></i> &nbsp; Phone Number</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='url';
+                                document.getElementById('set-options').style.display = 'none';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Globe"></i> &nbsp; Website Link</button>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <b>Choice Fields</b>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='select';
                                 document.getElementById('set-options').style.display = 'block';
-                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
-                                    <i class="icon-Arrow-Down3"></i> &nbsp; Option Select</button>
-                                <button onclick="fieldType='checkbox';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Arrow-Down3"></i> &nbsp; Drop-down Box</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='checkbox';
                                 document.getElementById('set-options').style.display = 'block';
-                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
-                                    <i class="icon-Check"></i> &nbsp; Check Boxes</button>
-                                <button onclick="fieldType='radio';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Check"></i> &nbsp; Check Boxes</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='radio';
                                 document.getElementById('set-options').style.display = 'block';
-                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
-                                    <i class="icon-Circular-Point"></i> &nbsp; Radio Buttons</button>
-                                <button onclick="fieldType='range';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Circular-Point"></i> &nbsp; Single Choice</button>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <b>Other Fields</b>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='range';
                                 document.getElementById('set-options').style.display = 'none';
-                                document.getElementById('set-range').style.display = 'block'" type="button" class="btn text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
-                                    <i class="icon-Vector"></i> &nbsp; Slider</button>
-                                <button {# draggable="true" #} ondragstart="dragField(event)" onclick="fieldType='date';
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'block'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Vector"></i> &nbsp; Slider</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button {# draggable="true" #} ondragstart="dragField(event)" onclick="fieldType='date';
                                 document.getElementById('set-options').style.display = 'none';
-                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
-                                    <i class="icon-Calendar-3"></i> &nbsp; Date</button>
+                                document.getElementById('set-required').style.display = 'block';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Calendar-3"></i> &nbsp; Date</button>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <b>Informational (Non-editable)</b>
+                                        <hr />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='display-text';
+                                document.getElementById('set-options').style.display = 'none';
+                                document.getElementById('set-required').style.display = 'none';
+                                document.getElementById('set-display-info').style.display = 'block';
+                                document.getElementById('set-display-image').style.display = 'none';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Font-Name"></i> &nbsp; Text</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <button onclick="fieldType='display-image';
+                                document.getElementById('set-options').style.display = 'none';
+                                document.getElementById('set-required').style.display = 'none';
+                                document.getElementById('set-display-info').style.display = 'none';
+                                document.getElementById('set-display-image').style.display = 'block';
+                                document.getElementById('set-range').style.display = 'none'" type="button" class="btn btn-sm text-left width-full bg-primary" data-toggle="modal" data-target="#field-modal">
+                                            <i class="icon-Photo"></i> &nbsp; Image</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -142,24 +248,51 @@
 
                             function loadForm() {
 
-                                var formHtml = '';
-                                var fieldsSelectHtml = '';
-                                var rangeFields = [];
+                                var formHtml = '', fieldsSelectHtml = '', rangeFields = [], prevField = "";
                                 for (var i = 0; i < formArray.length; i++) {
                                     fieldsSelectHtml += '<option value="' + i + '">' + '(' + (i + 1) + ') ' + formArray[i].label + '</option>';
-                                    formHtml += '<li>';
+                                    if (formArray[i].fieldType === "display-text")
+                                        formHtml += '<li style="list-style: none; margin-left: -25px">';
+                                    else {
+                                        if (prevField.fieldType === "display-text")
+                                            formHtml += '<li value=' + (i) + '>';
+                                        else
+                                            formHtml += '<li>';
+                                    }
+                                    var asteriskStr = "";
+                                    if (formArray[i].required)
+                                        asteriskStr = "<span class='text-danger'>*</span>";
                                     if (formArray[i].fieldType === "range") {
                                         formHtml += '<label for="' + i + '">' + formArray[i].label +
-                                            ' (' + formArray[i].min + ' to ' + formArray[i].max + '):</label>';
+                                            ' (' + formArray[i].min + ' to ' + formArray[i].max + ')' + asteriskStr + '</label>';
                                     } else
-                                        formHtml += '<label for="' + i + '">' + formArray[i].label + ':</label>';
+                                        formHtml += '<label for="' + i + '">' + formArray[i].label + asteriskStr + '</label>';
                                     switch (formArray[i].fieldType) {
+                                        case "display-text":
+                                            formHtml += '<p class="text-muted">' + formArray[i].moreInfo + '</p>';
+                                            break;
                                         case "text":
-                                            formHtml += '<input class="secondary-input" type="text" name="' + i + '" placeholder="Enter your answer..."' +
+                                            formHtml += '<input class="secondary-input" type="text" name="' + i + '" placeholder="Enter answer..."' +
+                                                ' id="' + i + '">';
+                                            break;
+                                        case "number":
+                                            formHtml += '<input class="secondary-input" type="number" name="' + i + '" min="' + formArray[i].min +
+                                                '" max="' + formArray[i].max  + '" placeholder="Enter number..."' + ' id="' + i + '">';
+                                            break;
+                                        case "email":
+                                            formHtml += '<input class="secondary-input" type="email" name="' + i + '" placeholder="Enter email..."' +
+                                                ' id="' + i + '">';
+                                            break;
+                                        case "tel":
+                                            formHtml += '<input class="secondary-input" type="tel" name="' + i + '" placeholder="Enter phone number..."' +
+                                                ' id="' + i + '">';
+                                            break;
+                                        case "url":
+                                            formHtml += '<input class="secondary-input" type="url" name="' + i + '" placeholder="http://..."' +
                                                 ' id="' + i + '">';
                                             break;
                                         case "textarea":
-                                            formHtml += '<textarea class="secondary-input" name="' + i + '" placeholder="Enter your answer..." ' +
+                                            formHtml += '<textarea class="secondary-input" name="' + i + '" placeholder="Enter answer..." ' +
                                                 'id="' + i + '"></textarea>';
                                             break;
                                         case "select":
@@ -200,7 +333,8 @@
                                             break;
                                     }
                                     formHtml += '<button onclick="selectField(' + i + ')" type="button" class="btn bg-primary"><i class="icon-Pen-4"></i>&nbsp;&nbsp;Edit Field</button>';
-                                    formHtml += '</li>'
+                                    formHtml += '</li>';
+                                    prevField = formArray[i];
                                 }
                                 document.getElementById("form-content").innerHTML = formHtml;
                                 document.getElementById("select-field").innerHTML = fieldsSelectHtml;
@@ -219,7 +353,8 @@
                                         '<h4 class="text-center">Start adding fields from the left panel</h4>';
                                 }
                                 else {
-                                    document.getElementById('panel-edit-field').style.display = 'block';
+                                    document.getElementById('panel-edit-field').style.display = 'none';
+                                    {#                                    document.getElementById('panel-edit-field').style.display = 'block';#}
                                     selectField(selectedField);
                                 }
 
@@ -228,7 +363,7 @@
 
                             loadForm();
 
-                            function addField(title, options, min, max) {
+                            function addField(title, options, min, max, required, moreInfo) {
                                 if (title === "") {
                                     console.warn("Warning: Title cannot be empty");
                                     return;
@@ -236,6 +371,38 @@
                                 if ((fieldType === "select" || fieldType === "checkbox" || fieldType === "radio") && options === "") {
                                     console.warn("Warning: Options cannot be empty");
                                     return;
+                                }
+                                if ((fieldType === "range") && (min === "" || max === "")) {
+                                    console.warn("Warning: Min or Max cannot be empty");
+                                    return;
+                                }
+                                if ((fieldType === "display-image") && (document.getElementById('field-display-image').value  === "")) {
+                                    console.warn("Warning: Image cannot be empty");
+                                    return;
+                                }
+                                if (fieldType === "display-image") {
+                                    document.getElementsByClassName("overlay")[0].style.display = "block";
+                                    var form = $("#set-display-image");
+                                    form.submit(function () {
+                                        var formData = new FormData(this);
+                                        $.ajax({
+                                            url: '/forms/upload_image/',
+                                            type: 'POST',
+                                            data: formData,
+                                            success: function (data) {
+                                                console.log(data)
+                                            },
+                                            fail: function (data) {
+                                                console.log(data)
+                                            },
+                                            cache: false,
+                                            contentType: false,
+                                            processData: false
+                                        });
+
+                                        return false;
+                                    });
+                                    form.submit();
                                 }
                                 document.getElementById('field-title').value = "";
                                 document.getElementById('field-options').value = "";
@@ -249,21 +416,31 @@
                                         "id": formArray.length,
                                         "fieldType": fieldType,
                                         "label": title,
-                                        "options": options.split(",")
+                                        "options": options.split(","),
+                                        "required": required
                                     };
-                                } else if (fieldType === "range") {
+                                } else if (fieldType === "range" || fieldType === "number") {
                                     newField = {
                                         "id": formArray.length,
                                         "fieldType": fieldType,
                                         "label": title,
                                         "min": min,
-                                        "max": max
+                                        "max": max,
+                                        "required": required
+                                    };
+                                } else if (fieldType === "display-text") {
+                                    newField = {
+                                        "id": formArray.length,
+                                        "fieldType": fieldType,
+                                        "label": title,
+                                        "moreInfo": moreInfo
                                     };
                                 } else {
                                     newField = {
                                         "id": formArray.length,
                                         "fieldType": fieldType,
-                                        "label": title
+                                        "label": title,
+                                        "required": required
                                     };
                                 }
 
@@ -320,8 +497,8 @@
                     <h4 class="modal-title">Add New Field</h4>
                 </div>
                 <div class="modal-body" style="padding-left: 30px; padding-right: 30px;">
-                    <label for="field-title">Field Title</label>
-                    <input class="secondary-input" id="field-title" type="text" placeholder="Your question">
+                    <label for="field-title">Question/Title</label>
+                    <input class="secondary-input" id="field-title" type="text" placeholder="Your question/title">
                     <div id="set-options" style="margin-top: 20px">
                         <label for="field-options">Choices (Separate with commas)</label>
                         <input class="secondary-input" id="field-options" type="text" placeholder="E.g 'Lagos,Port Harcourt,Abuja'" />
@@ -331,18 +508,35 @@
                         <input id="field-min" min="0" type="number" placeholder="E.g 1" class="secondary-input" />
                         <input id="field-max" min="0" type="number" placeholder="E.g 10" class="secondary-input" />
                     </div>
+                    <div id="set-display-info" style="margin-top: 20px">
+                        <label for="field-display-info">More Info:&nbsp;</label>
+                        <textarea class="secondary-input" id="field-display-info" placeholder="Enter more information..."></textarea>
+                    </div>
+                    <form id="set-display-image" method="post" enctype="multipart/form-data" style="margin-top: 20px">
+                        {% csrf_token %}
+                        <label for="field-display-image">Image:&nbsp;</label>
+                        <input id="field-display-image" name="file" type="file" placeholder="Select Image..." class="secondary-input" />
+                        <button>Submit</button>
+                    </form>
+                    <div id="set-required">
+                        <input type="checkbox" id="field-required" ><label for="field-required"><span><span></span></span>Required</label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal"
                             onclick="addField(document.getElementById('field-title').value,
-                                                     document.getElementById('field-options').value, document.getElementById('field-min').value,
-                                                     document.getElementById('field-max').value)" class="btn bg-primary">
+                                                     document.getElementById('field-options').value,
+                                                      document.getElementById('field-min').value,
+                                                     document.getElementById('field-max').value,
+                                                     document.getElementById('field-required').checked,
+                                                     document.getElementById('field-display-info').value)" class="btn bg-primary">
                         Add Field
                     </button>
                 </div>
             </div>
         </div>
     </div>
+    <div class="overlay" style="display: none;"></div>
 {% endblock %}
 {% block js %}
     <script>

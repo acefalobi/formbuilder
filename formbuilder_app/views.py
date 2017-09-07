@@ -18,16 +18,12 @@ def landing_page(request):
 @login_required()
 def dashboard(request):
     user = request.user
-    user_forms = user.form_set.order_by('-publishedDate')
-
-    user_forms_submission_count = []
-
-    for user_form in user_forms:
-        user_forms_submission_count.append(user_form.formsubmission_set.count())
+    all_forms = user.form_set.order_by('title')
+    recent_forms = user.form_set.order_by('-publishedDate')[:3]
 
     variables = {
-        'user_forms_submission_count': user_forms_submission_count,
-        'user_forms': user_forms,
+        'recent_forms': recent_forms,
+        'all_forms': all_forms,
         'dashboard': True,
     }
 
@@ -121,34 +117,35 @@ def form_new(request):
         form_json = "[]"
     if request.GET['template'] == 'contact':
         form_title = "Contact Information"
-        form_json = '[{"id": 0,"fieldType": "text","label": "Name"},' \
-                    '{"id": 1,"fieldType": "text","label": "Email"},' \
-                    '{"id": 2,"fieldType": "date","label": "Date Of Birth"},' \
-                    '{"id": 3,"fieldType": "textarea","label": "Address"},' \
-                    '{"id": 4,"fieldType": "text","label": "Phone Number"},' \
-                    '{"id": 5,"fieldType": "textarea","label": "Comments"}]'
+        form_json = '[{"id": 0,"fieldType": "text","label": "Name","required": true},' \
+                    '{"id": 1,"fieldType": "email","label": "Email","required": true},' \
+                    '{"id": 2,"fieldType": "date","label": "Date Of Birth","required": true},' \
+                    '{"id": 3,"fieldType": "textarea","label": "Address","required": true},' \
+                    '{"id": 4,"fieldType": "tel","label": "Phone Number","required": true},' \
+                    '{"id": 5,"fieldType": "textarea","label": "Comments","required": false}]'
     if request.GET['template'] == 'feedback':
         form_title = "Customer Feedback"
         form_json = '[{"id": 0,"fieldType": "radio","label": "Feedback Type",' \
-                    '"options": ["Comments", "Questions", "Bug Reports", "Feature Request"]},' \
-                    '{"id": 1,"fieldType": "textarea","label": "Feedback"},' \
-                    '{"id": 2,"fieldType": "textarea","label": "Suggestions for improvement"},' \
-                    '{"id": 3,"fieldType": "text","label": "Name"},' \
-                    '{"id": 4,"fieldType": "text","label": "Email"}]'
+                    '"options": ["Comments", "Questions", "Bug Reports", "Feature Request"],"required": true},' \
+                    '{"id": 1,"fieldType": "textarea","label": "Feedback","required": true},' \
+                    '{"id": 2,"fieldType": "textarea","label": "Suggestions for improvement","required": false},' \
+                    '{"id": 3,"fieldType": "text","label": "Name","required": true},' \
+                    '{"id": 4,"fieldType": "email","label": "Email","required": true}]'
     if request.GET['template'] == 'event_register':
         form_title = "Event Registration"
-        form_json = '[{"id": 0,"fieldType": "text","label": "Name"},' \
-                    '{"id": 1,"fieldType": "text","label": "Email"},' \
-                    '{"id": 2,"fieldType": "text","label": "Organization"},' \
-                    '{"id": 3,"fieldType": "text","label": "Phone Number"},' \
+        form_json = '[{"id": 0,"fieldType": "text","label": "Name","required": true},' \
+                    '{"id": 1,"fieldType": "email","label": "Email","required": true},' \
+                    '{"id": 2,"fieldType": "text","label": "Organization","required": false},' \
+                    '{"id": 3,"fieldType": "tel","label": "Phone Number","required": true},' \
                     '{"id": 4,"fieldType": "radio","label": "Till when, would you be staying?",' \
-                    '"options": ["9 AM","12 PM","3 PM","6 PM","9 PM"]}]'
+                    '"options": ["9 AM","12 PM","3 PM","6 PM","9 PM"],"required": true}]'
     if request.GET['template'] == 'donation_pledge':
         form_title = "Donation PLedge"
-        form_json = '[{"id": 0,"fieldType": "text","label": "Name"},' \
-                    '{"id": 1,"fieldType": "text","label": "Email"},' \
-                    '{"id": 3,"fieldType": "text","label": "Phone Number"},' \
-                    '{"id": 3,"fieldType": "range","label": "Funds to donate (in NGN)","min": 100,"max": 100000}]'
+        form_json = '[{"id": 0,"fieldType": "text","label": "Name","required": true},' \
+                    '{"id": 1,"fieldType": "email","label": "Email","required": true},' \
+                    '{"id": 3,"fieldType": "tel","label": "Phone Number","required": true},' \
+                    '{"id": 3,"fieldType": "number","label": "Funds to donate (in NGN)",' \
+                    '"min": 100,"max": 100000,"required": true}]'
 
     variables = {
         'form_title': form_title,
@@ -260,20 +257,58 @@ def form_submissions(request, form_id):
     return render(request, 'dashboard_form_submissions.html', variables)
 
 
-@login_required()
-def form_download_submissions(request, form_id):
-    form_to_download = get_object_or_404(Form, id=form_id)
-
-    if form_to_download.user.username != request.user.username:
-        raise Http404('Form does not exist')
-
-    # submissions = form_to_download.formsubmission_set.order_by("-publishedDate")
-
-    # for submission in submissions:
-    #
-
-    return HttpResponseRedirect('/dashboard')
-
-
 def form_submit_success(request):
     return render(request, "form_submit_success.html")
+
+
+@login_required()
+def account_page(request):
+    if request.method == 'POST':
+        form = AccountForm(request.POST)
+        if form.is_valid():
+            user_save(request, form)
+
+    else:
+        form = AccountForm({
+            'username': request.user.username,
+            'email': request.user.email,
+            'first_name': request.user.first_name,
+            'last_name': request.user.last_name,
+            'password1': '',
+            'password2': ''
+        })
+
+    variables = {
+        'form': form
+    }
+    return render(request, "account.html", variables)
+
+
+def user_save(request, form):
+    user = request.user
+
+    user.username = form.cleaned_data['username']
+    user.email = form.cleaned_data['email']
+    user.first_name = form.cleaned_data['first_name']
+    user.last_name = form.cleaned_data['last_name']
+    if form.cleaned_data['password1'] != '':
+        user.password = form.cleaned_data['password1'],
+
+    user.save()
+
+    return user
+
+
+def handle_uploaded_file(file):
+    with open('formbuilder/assets/img/forms/' + str(datetime.now().microsecond), 'wb+') as destination:
+        for chunk in file.chunks():
+            destination.write(chunk)
+
+
+def form_upload_image(request):
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['file'])
+            return HttpResponse(1)
+    return HttpResponse(0)

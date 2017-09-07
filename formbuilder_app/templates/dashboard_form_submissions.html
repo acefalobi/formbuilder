@@ -1,44 +1,177 @@
 {% extends "dashboard_base.html" %}
 {% block title %}Submissions for: {{ form_to_view.title }}{% endblock %}
 {% block content_dashboard %}
-    <h1><b>{{ form_to_view.title }}</b> Submissions</h1><br />
+    <!--suppress HtmlUnknownTarget -->
+    <h1><b>{{ form_to_view.title }}</b> Submissions</h1>
+    <div id="table-tools">
+{#        <button class="btn btn-flat"><i class="icon-Filter-2"></i> Filter</button>#}
+        <button class="btn btn-flat" onclick="exportTableToCSV('{{ form_to_view.title }} (table).csv')">
+            <i class="icon-File-CSV"></i> Get CSV File
+        </button>
+        <button class="btn btn-flat" onclick="exportToExcel()">
+            <i class="icon-File-Excel"></i> Get Excel File
+        </button><br />
+    </div>
     <!--suppress JSUnusedAssignment, JSUnresolvedVariable -->
-        <div class="width-full">
+    <div class="width-full">
 
-            <table class="table">
-                <thead>
-                <tr id="table-head-row"></tr>
-                </thead>
-                <tbody>
-                {% for submission in submissions %}
-                    <tr id="table-body-row-{{ forloop.counter0 }}"></tr>
-                {% endfor %}
+        <table id="main-table" class="table">
+            <thead>
+            <tr id="table-head-row"></tr>
+            </thead>
+            <tbody>
+            {% for submission in submissions %}
+                <tr id="table-body-row-{{ forloop.counter0 }}"></tr>
+            {% endfor %}
 
-                </tbody>
-            </table>
+            </tbody>
+        </table>
 
-            <script>
-                var formArray = {{ form_to_view.jsonForm | safe }};
-                var headHtml = '<th>S/N</th>';
-                for (var i = 0; i < formArray.length; i++) {
-                    headHtml += '<th>';
-                    headHtml += formArray[i].label;
-                    headHtml += '</th>'
+        <script>
+            var formArray = [];
+            formArray = {{ form_to_view.jsonForm | safe }};
+            var headHtml = '<th><a class="text-white" onclick="sortTable(0)">S/N</a><span>&nbsp;&nbsp;<i class="icon-Scroll"></i></span></th>';
+            for (var i = 0; i < formArray.length; i++) {
+                headHtml += '<th><a class="text-white" onclick="sortTable(' + (i + 1) + ')">';
+                headHtml += formArray[i].label;
+                headHtml += '</a><span></span></th>'
+            }
+            headHtml += '<th><a class="text-white" onclick="sortTable(formArray.length + 1)">Location</a><span></span></th>';
+            document.getElementById("table-head-row").innerHTML = headHtml;
+
+            {% for submission in submissions %}
+                var submissionArray = [];
+                submissionArray{{ forloop.counter0 }} = {{ submission.jsonSubmission | safe }};
+                var bodyHtml{{ forloop.counter0 }} = '<th>{{ forloop.counter }}</th>';
+                for (var j = 0; j < submissionArray{{ forloop.counter0 }}.length; j++) {
+                    bodyHtml{{ forloop.counter0 }} += '<th>';
+                    bodyHtml{{ forloop.counter0 }} += submissionArray{{ forloop.counter0 }}[j];
+                    bodyHtml{{ forloop.counter0 }} += '</th>'
                 }
-                document.getElementById("table-head-row").innerHTML = headHtml;
-
-                {% for submission in submissions %}
-                    var submissionArray{{ forloop.counter0 }} = {{ submission.jsonSubmission | safe }};
-                    var bodyHtml{{ forloop.counter0 }} = '<th>{{ forloop.counter }}</th>';
-                    for (var i = 0; i < submissionArray{{ forloop.counter0 }}.length; i++) {
-                        bodyHtml{{ forloop.counter0 }} += '<th>';
-                        bodyHtml{{ forloop.counter0 }} += submissionArray{{ forloop.counter0 }}[i];
-                        bodyHtml{{ forloop.counter0 }} += '</th>'
-                    }
-                    document.getElementById("table-body-row-{{ forloop.counter0 }}").innerHTML = bodyHtml{{ forloop.counter0 }};
-                {% endfor %}
-            </script>
-        </div>
+                document.getElementById("table-body-row-{{ forloop.counter0 }}").innerHTML = bodyHtml{{ forloop.counter0 }};
+            {% endfor %}
+        </script>
+    </div>
 {% endblock %}
 {% block js %}
+    <script src="/assets/lib/table-export/xlsx.core.min.js" type="text/javascript"></script>
+    <script src="/assets/lib/table-export/FileSaver.min.js" type="text/javascript"></script>
+    <script src="/assets/lib/table-export/tableexport.min.js" type="text/javascript"></script>
+    <!--suppress JSUnresolvedVariable, JSUnresolvedFunction -->
+    <script>
+        function sortTable(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("main-table");
+            switching = true;
+            //Set the sorting direction to ascending:
+            dir = "asc";
+            /*Make a loop that will continue until
+            no switching has been done:*/
+            while (switching) {
+                //start by saying: no switching is done:
+                switching = false;
+                rows = table.getElementsByTagName("TR");
+                /*Loop through all table rows (except the
+                first, which contains table headers):*/
+                for (i = 1; i < (rows.length - 1); i++) {
+                    //start by saying there should be no switching:
+                    shouldSwitch = false;
+                    /*Get the two elements you want to compare,
+                    one from current row and one from the next:*/
+                    x = rows[i].getElementsByTagName("th")[n];
+                    y = rows[i + 1].getElementsByTagName("th")[n];
+                    /*check if the two rows should switch place,
+                    based on the direction, asc or desc:*/
+                    if (dir === "asc") {
+                        if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                            //if so, mark as a switch and break the loop:
+                            shouldSwitch= true;
+                            break;
+                        }
+                    } else if (dir === "desc") {
+                        if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                            //if so, mark as a switch and break the loop:
+                            shouldSwitch= true;
+                            break;
+                        }
+                    }
+                }
+                if (shouldSwitch) {
+                    /*If a switch has been marked, make the switch
+                    and mark that a switch has been done:*/
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                    //Each time a switch is done, increase this count by 1:
+                    switchcount ++;
+                } else {
+                    /*If no switching has been done AND the direction is "asc",
+                    set the direction to "desc" and run the while loop again.*/
+                    if (switchcount === 0 && dir === "asc") {
+                        dir = "desc";
+                        switching = true;
+                    }
+                }
+            }
+            for (var j = 0; j < table.getElementsByTagName("TR")[0].getElementsByTagName("th").length; j++) {
+                table.getElementsByTagName("TR")[0].getElementsByTagName("th")[j]
+                    .getElementsByTagName("span")[0].innerHTML = "";
+            }
+            table.getElementsByTagName("TR")[0].getElementsByTagName("th")[n]
+                .getElementsByTagName("span")[0].innerHTML = "&nbsp;&nbsp;<i class='icon-Scroll'></i>";
+        }
+
+        function downloadCSV(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            // CSV file
+            csvFile = new Blob([csv], {type: "text/csv"});
+
+            // Download link
+            downloadLink = document.createElement("a");
+
+            // File name
+            downloadLink.download = filename;
+
+            // Create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Hide download link
+            downloadLink.style.display = "none";
+
+            // Add the link to DOM
+            document.body.appendChild(downloadLink);
+
+            // Click download link
+            downloadLink.click();
+        }
+
+        function exportTableToCSV(filename) {
+            var csv = [];
+            var rows = document.querySelectorAll("table tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                for (var j = 0; j < cols.length; j++)
+                    row.push(cols[j].innerText);
+
+                csv.push(row.join(","));
+            }
+
+            // Download CSV file
+            downloadCSV(csv.join("\n"), filename);
+        }
+
+        function exportToExcel() {
+            TableExport(document.getElementById("main-table"), {
+                bootstrap: true,
+                exportButtons: true,
+                formats: ['xlsx'],
+                filename: '{{ form_to_view.title }} (table)'
+            });
+
+            $('.xlsx').removeClass("btn-default").addClass("btn-flat");
+        }
+    </script>
 {% endblock %}
