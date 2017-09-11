@@ -28,5 +28,5 @@ urlpatterns = [
     url(r'^', include('formbuilder_app.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^login/', views.login),
-    url(r'^assets/(?P<path>.*)$', serve, {'document_root' : assets}),
+    url(r'^assets/(?P<path>.*)$', serve, {'document_root': assets}),
 ]
